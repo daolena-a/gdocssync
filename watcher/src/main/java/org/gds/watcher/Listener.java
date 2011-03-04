@@ -29,7 +29,7 @@ import net.contentobjects.jnotify.JNotifyListener;
 public class Listener implements JNotifyListener
 {
 
-   public static final int mask = JNotify.FILE_ANY;
+   public static final int mask = JNotify.FILE_CREATED;
 
    public void fileCreated(final int i, final String s, final String s1)
    {

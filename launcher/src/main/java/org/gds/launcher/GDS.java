@@ -23,17 +23,17 @@ import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
 import org.gds.watcher.Listener;
 
+import java.util.Properties;
+
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class Main
+public class GDS
 {
-   static String path = "/Users/defrancea/Desktop";
-
    public static void main(String[] argv) throws JNotifyException, InterruptedException
    {
-      int watchID = JNotify.addWatch(path, Listener.mask, true, new Listener());
+      JNotify.addWatch(argv[0], Listener.mask, true, new Listener());
       while(true) Thread.sleep(1000000);
    }
 }
