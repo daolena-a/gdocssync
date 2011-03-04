@@ -9,14 +9,7 @@
    </parent>
    <modelVersion>4.0.0</modelVersion>
 
-   <artifactId>gds.watcher</artifactId>
+   <name>Google Doc Synchronizer - User Interface</name>
 
-   <name>Google Doc Synchronizer - Watcher</name>
-
-   <dependencies>
-      <dependency>
-         <groupId>jnotify</groupId>
-         <artifactId>jnotify</artifactId>
-      </dependency>
-   </dependencies>
+   <artifactId>gds.gui</artifactId>
 </project>

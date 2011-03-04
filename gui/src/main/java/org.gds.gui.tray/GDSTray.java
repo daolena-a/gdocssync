@@ -17,23 +17,45 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.launcher;
+package org.gds.gui.tray;
 
-import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyException;
-import org.gds.watcher.Listener;
-
-import java.util.Properties;
+import java.awt.*;
+import java.net.URL;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class GDS
+public class GDSTray
 {
-   public static void main(String[] argv) throws JNotifyException, InterruptedException
+   private final SystemTray systemTray;
+   private final URL imageURL;
+   private final Image image;
+   private final TrayIcon trayIcon;
+
+   public GDSTray()
    {
-      JNotify.addWatch(argv[0], Listener.mask, true, new Listener());
-      while(true) Thread.sleep(1000000);
+      systemTray = SystemTray.getSystemTray();
+      imageURL = Thread.currentThread().getContextClassLoader().getResource("tray.png");
+      image = Toolkit.getDefaultToolkit().getImage(imageURL);
+      trayIcon = new TrayIcon(image, "Tray Demo", createPopumMenu());
+      trayIcon.setImageAutoSize(true);
+   }
+
+   public void show()
+   {
+      try
+      {
+         systemTray.add(trayIcon);
+      }
+      catch (AWTException e)
+      {
+        System.err.println("TrayIcon could not be added.");
+      }
+   }
+
+   private PopupMenu createPopumMenu()
+   {
+      return new PopupMenu();
    }
 }

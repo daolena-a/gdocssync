@@ -14,13 +14,18 @@
    <dependencyManagement>
       <dependencies>
          <dependency>
-            <groupId>org.gdocsynchronizer</groupId>
-            <artifactId>gdocsynchronizer.watcher</artifactId>
+            <groupId>org.gds</groupId>
+            <artifactId>gds.watcher</artifactId>
             <version>1.0.0-Alpha01</version>
          </dependency>
          <dependency>
-            <groupId>org.gdocsynchronizer</groupId>
-            <artifactId>gdocsynchronizer.launcher</artifactId>
+            <groupId>org.gds</groupId>
+            <artifactId>gds.launcher</artifactId>
+            <version>1.0.0-Alpha01</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gds</groupId>
+            <artifactId>gds.gui</artifactId>
             <version>1.0.0-Alpha01</version>
          </dependency>
 
@@ -34,6 +39,7 @@
 
    <modules>
       <module>watcher</module>
-      <module>launcher</module>
+      <module>core</module>
+      <module>gui</module>
    </modules>
 </project>

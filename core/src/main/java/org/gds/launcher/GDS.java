@@ -1,0 +1,43 @@
+/*
+* Copyright (C) 2003-2009 eXo Platform SAS.
+*
+* This is free software; you can redistribute it and/or modify it
+* under the terms of the GNU Lesser General Public License as
+* published by the Free Software Foundation; either version 2.1 of
+* the License, or (at your option) any later version.
+*
+* This software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this software; if not, write to the Free
+* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+* 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+
+package org.gds.launcher;
+
+import net.contentobjects.jnotify.JNotify;
+import net.contentobjects.jnotify.JNotifyException;
+import org.gds.gui.tray.GDSTray;
+import org.gds.watcher.Listener;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Properties;
+
+/**
+ * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
+ * @version $Revision$
+ */
+public class GDS
+{
+   public static void main(String[] argv) throws JNotifyException, InterruptedException
+   {
+      new GDSTray().show();
+      JNotify.addWatch(argv[0], Listener.mask, true, new Listener());
+      while(true) Thread.sleep(1000000);
+   }
+}
