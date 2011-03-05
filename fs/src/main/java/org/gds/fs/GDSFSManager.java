@@ -17,41 +17,35 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.watcher;
+package org.gds.fs;
 
-import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyListener;
+import java.io.File;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class Listener implements JNotifyListener
+public abstract class GDSFSManager
 {
+   protected File monitoredFile;
 
-   public static final int mask =
-         JNotify.FILE_CREATED |
-         JNotify.FILE_DELETED |
-         JNotify.FILE_MODIFIED |
-         JNotify.FILE_RENAMED;
-
-   public void fileCreated(final int i, final String s, final String s1)
+   protected GDSFSManager(final File monitoredFile)
    {
-      System.out.println("created");
+      if (monitoredFile == null)
+      {
+         throw new IllegalArgumentException("monitoredFile is null");
+      }
+      this.monitoredFile = monitoredFile;
    }
 
-   public void fileDeleted(final int i, final String s, final String s1)
+   public void init()
    {
-      System.out.println("removed");
+      File sysDir = getSysDirectory();
+      if (!sysDir.exists())
+      {
+         sysDir.mkdir();
+      }
    }
 
-   public void fileModified(final int i, final String s, final String s1)
-   {
-      System.out.println("updated");
-   }
-
-   public void fileRenamed(final int i, final String s, final String s1, final String s2)
-   {
-      System.out.println("renamed");
-   }
+   abstract protected File getSysDirectory();
 }

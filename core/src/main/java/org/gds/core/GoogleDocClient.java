@@ -24,6 +24,7 @@ import com.google.gdata.data.docs.DocumentListFeed;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
+import javax.mail.FetchProfile;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,14 +35,33 @@ import java.net.URL;
  */
 public class GoogleDocClient
 {
-   public DocumentListFeed getDocuments()
+   private static String username;
+   private static String password;
+   private static DocsService client = new DocsService("gds");
+
+   public GoogleDocClient(String username, String password) throws AuthenticationException
+   {
+      this.username = username;
+      this.password = password;
+      client.setUserCredentials(username, password);
+   }
+
+   public DocumentListFeed getFiles()
+   {
+      return fetchFeed(Urls.ALL_FILES);
+   }
+
+   public DocumentListFeed getFolders()
+   {
+      return fetchFeed(Urls.ALL_FOLDERS);
+   }
+
+   private <T> T fetchFeed(Urls urls)
    {
       try
       {
-         DocsService client = new DocsService("yourCo-yourAppName-v1");
-         client.setUserCredentials("***", "***");
-         URL feedUri = new URL("https://docs.google.com/feeds/documents/private/full/-/MyFolder");
-         return (DocumentListFeed) client.getFeed(feedUri, DocumentListFeed.class);
+         Urls.UrlData data = urls.get();
+         return (T) client.getFeed(data.getUrl(), data.getClazz());
       }
       catch (MalformedURLException e)
       {

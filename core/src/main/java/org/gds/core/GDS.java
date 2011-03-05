@@ -19,10 +19,17 @@
 
 package org.gds.core;
 
+import com.google.gdata.data.docs.DocumentEntry;
+import com.google.gdata.data.docs.DocumentListEntry;
+import com.google.gdata.util.AuthenticationException;
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
+import org.gds.fs.GDSFSManager;
+import org.gds.fs.unix.GDSFSUnixManager;
 import org.gds.gui.GDSTray;
 import org.gds.watcher.Listener;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -30,10 +37,53 @@ import org.gds.watcher.Listener;
  */
 public class GDS
 {
-   public static void main(String[] argv) throws JNotifyException, InterruptedException
+   private File monitoredFile;
+   private GDSFSManager fsManager;
+   private GDSTray tray;
+   private GoogleDocClient googleDocClient;
+   private Thread remoteMonitor;
+
+   private GDS(String[] argv) throws AuthenticationException // TODO : clean this exception
    {
-      new GDSTray().show();
-      JNotify.addWatch(argv[0], Listener.mask, true, new Listener());
-      while(true) Thread.sleep(1000000);
+      // TODO : clean this config
+      monitoredFile = new File(argv[0]);
+      googleDocClient = new GoogleDocClient(argv[1], argv[2]);
+      fsManager = new GDSFSUnixManager(monitoredFile);
+      tray = new GDSTray();
+      remoteMonitor = new RemoteWatcherService(googleDocClient);
+   }
+
+   public void start()
+   {
+      fsManager.init();
+      startTray();
+      startLocalMonitoring(monitoredFile);
+      //startRemoteMonitoring();
+   }
+
+   private void startTray()
+   {
+      tray.show();
+   }
+
+   private void startLocalMonitoring(File monitoredFile)
+   {
+      try
+      {
+         JNotify.addWatch(monitoredFile.getAbsolutePath(), Listener.mask, true, new Listener());
+      }
+      catch (JNotifyException e)
+      {
+         e.printStackTrace(); // TODO : log/manage
+      }
+   }
+   private void startRemoteMonitoring()
+   {
+      remoteMonitor.start();
+   }
+
+   public static void main(String[] argv) throws JNotifyException, InterruptedException, AuthenticationException
+   {
+      new GDS(argv).start();
    }
 }
