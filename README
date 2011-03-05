@@ -11,6 +11,8 @@ How to build this project
          </activation>
          <properties>
             <gds.watched.directory>/path/to/watched/directory</gds.watched.directory>
+            <gds.login>gmailLogin</gds.login>
+            <gds.password>gmailPassword</gds.password>
          </properties>
          <repositories>
             <repository>
@@ -21,7 +23,7 @@ How to build this project
          </repositories>
       </profile>
    </profiles>
-<settings>
+</settings>
 
 2. Run build with gds maven profile :
 mvn clean install -Pgds
