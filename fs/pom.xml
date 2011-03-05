@@ -5,19 +5,12 @@
    <parent>
       <artifactId>gds.project</artifactId>
       <groupId>org.gds</groupId>
-      <version>1.0.0-Alpha01</version>
+      <version>1.0.0-Alpha01-SNAPSHOT</version>
    </parent>
    <modelVersion>4.0.0</modelVersion>
 
    <artifactId>gds.fs</artifactId>
 
-   <packaging>pom</packaging>
-
    <name>Google Doc Synchronizer - File system</name>
    
-   <modules>
-      <module>unix</module>
-   </modules>
-
-
 </project>

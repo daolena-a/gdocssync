@@ -9,14 +9,14 @@
    </parent>
    <modelVersion>4.0.0</modelVersion>
 
-   <artifactId>gds.watcher</artifactId>
+   <artifactId>gds.unix</artifactId>
 
-   <name>Google Doc Synchronizer - Watcher</name>
+   <name>Google Doc Synchronizer - Unix file system</name>
 
    <dependencies>
       <dependency>
-         <groupId>jnotify</groupId>
-         <artifactId>jnotify</artifactId>
+         <groupId>org.gds</groupId>
+         <artifactId>gds.fs</artifactId>
       </dependency>
    </dependencies>
 </project>

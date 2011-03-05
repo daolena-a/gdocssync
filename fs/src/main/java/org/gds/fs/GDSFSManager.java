@@ -20,6 +20,7 @@
 package org.gds.fs;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -28,6 +29,8 @@ import java.io.File;
 public abstract class GDSFSManager
 {
    protected File monitoredFile;
+   private File indexFileDirectory;
+   private File sysDirectory;
 
    protected GDSFSManager(final File monitoredFile)
    {
@@ -40,10 +43,30 @@ public abstract class GDSFSManager
 
    public void init()
    {
-      File sysDir = getSysDirectory();
-      if (!sysDir.exists())
+      //
+      sysDirectory = getSysDirectory();
+      if (!sysDirectory.exists())
       {
-         sysDir.mkdir();
+         sysDirectory.mkdir();
+      }
+
+      //
+      indexFileDirectory = new File(getSysDirectory(), "files");
+      if (!indexFileDirectory.exists())
+      {
+         indexFileDirectory.mkdir();
+      }
+   }
+
+   public void indexFile(File file)
+   {
+      try
+      {
+         new File(indexFileDirectory, file.getPath()).createNewFile();
+      }
+      catch (IOException e)
+      {
+         e.printStackTrace();  // TODO : manage
       }
    }
 

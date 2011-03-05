@@ -7,7 +7,7 @@
    <groupId>org.gds</groupId>
    <artifactId>gds.project</artifactId>
    <packaging>pom</packaging>
-   <version>1.0.0-Alpha01-SNAPSHOT</version>
+   <version>1.0.0-Alpha01</version>
 
    <name>Google Doc Synchronizer - Project</name>
 
@@ -16,27 +16,27 @@
          <dependency>
             <groupId>org.gds</groupId>
             <artifactId>gds.watcher</artifactId>
-            <version>1.0.0-Alpha01-SNAPSHOT</version>
+            <version>1.0.0-Alpha01</version>
          </dependency>
          <dependency>
             <groupId>org.gds</groupId>
             <artifactId>gds.core</artifactId>
-            <version>1.0.0-Alpha01-SNAPSHOT</version>
+            <version>1.0.0-Alpha01</version>
          </dependency>
          <dependency>
             <groupId>org.gds</groupId>
             <artifactId>gds.gui</artifactId>
-            <version>1.0.0-Alpha01-SNAPSHOT</version>
+            <version>1.0.0-Alpha01</version>
          </dependency>
          <dependency>
             <groupId>org.gds</groupId>
             <artifactId>gds.fs</artifactId>
-            <version>1.0.0-Alpha01-SNAPSHOT</version>
+            <version>1.0.0-Alpha01</version>
          </dependency>
          <dependency>
             <groupId>org.gds</groupId>
             <artifactId>gds.unix</artifactId>
-            <version>1.0.0-Alpha01-SNAPSHOT</version>
+            <version>1.0.0-Alpha01</version>
          </dependency>
 
          <dependency>
@@ -97,6 +97,5 @@
       <module>core</module>
       <module>gui</module>
       <module>fs</module>
-      <module>unix</module>
    </modules>
 </project>

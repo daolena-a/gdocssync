@@ -5,7 +5,7 @@
    <parent>
       <artifactId>gds.project</artifactId>
       <groupId>org.gds</groupId>
-      <version>1.0.0-Alpha01-SNAPSHOT</version>
+      <version>1.0.0-Alpha01</version>
    </parent>
    <modelVersion>4.0.0</modelVersion>
 
@@ -22,10 +22,9 @@
          <groupId>org.gds</groupId>
          <artifactId>gds.gui</artifactId>
       </dependency>
-      <!-- TOTO : use correct depedencies with packaging -->
       <dependency>
          <groupId>org.gds</groupId>
-         <artifactId>gds.unix</artifactId>
+         <artifactId>gds.unix</artifactId> <!-- TOTO : use correct depedencies with packaging -->
       </dependency>
       <dependency>
          <groupId>jnotify</groupId>
@@ -79,8 +78,6 @@
                            <mainClass>org.gds.core.GDS</mainClass>
                            <arguments>
                               <argument>${gds.watched.directory}</argument>
-                              <argument>${gds.login}</argument>
-                              <argument>${gds.password}</argument>
                            </arguments>
                         </configuration>
                      </execution>

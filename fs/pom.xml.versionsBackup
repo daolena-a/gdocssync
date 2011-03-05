@@ -5,18 +5,19 @@
    <parent>
       <artifactId>gds.project</artifactId>
       <groupId>org.gds</groupId>
-      <version>1.0.0-Alpha01-SNAPSHOT</version>
+      <version>1.0.0-Alpha01</version>
    </parent>
    <modelVersion>4.0.0</modelVersion>
 
-   <artifactId>gds.watcher</artifactId>
+   <artifactId>gds.fs</artifactId>
 
-   <name>Google Doc Synchronizer - Watcher</name>
+   <packaging>pom</packaging>
 
-   <dependencies>
-      <dependency>
-         <groupId>jnotify</groupId>
-         <artifactId>jnotify</artifactId>
-      </dependency>
-   </dependencies>
+   <name>Google Doc Synchronizer - File system</name>
+   
+   <modules>
+      <module>unix</module>
+   </modules>
+
+
 </project>
