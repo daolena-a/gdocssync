@@ -17,55 +17,48 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.gui.tray;
+package org.gds.core;
 
-import java.awt.*;
+import com.google.gdata.client.docs.DocsService;
+import com.google.gdata.data.docs.DocumentListFeed;
+import com.google.gdata.util.AuthenticationException;
+import com.google.gdata.util.ServiceException;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class GDSTray
+public class GoogleDocClient
 {
-   private final SystemTray systemTray;
-   private final URL imageURL;
-   private final Image image;
-   private final TrayIcon trayIcon;
-
-   public GDSTray()
-   {
-      systemTray = SystemTray.getSystemTray();
-      imageURL = Thread.currentThread().getContextClassLoader().getResource("tray.png");
-      image = Toolkit.getDefaultToolkit().getImage(imageURL);
-      trayIcon = new TrayIcon(image, "Tray Demo", createPopumMenu());
-      trayIcon.setImageAutoSize(true);
-   }
-
-   public void show()
+   public DocumentListFeed getDocuments()
    {
       try
       {
-         systemTray.add(trayIcon);
+         DocsService client = new DocsService("yourCo-yourAppName-v1");
+         client.setUserCredentials("***", "***");
+         URL feedUri = new URL("https://docs.google.com/feeds/documents/private/full/-/MyFolder");
+         return (DocumentListFeed) client.getFeed(feedUri, DocumentListFeed.class);
       }
-      catch (AWTException e)
+      catch (MalformedURLException e)
       {
-        System.err.println("TrayIcon could not be added.");
+         e.printStackTrace();
       }
-   }
-
-   public void upToDate()
-   {
-
-   }
-
-   public void updating()
-   {
-      
-   }
-
-   private PopupMenu createPopumMenu()
-   {
-      return new PopupMenu();
+      catch (AuthenticationException e)
+      {
+         e.printStackTrace();
+      }
+      catch (ServiceException e)
+      {
+         e.printStackTrace();
+      }
+      catch (IOException e)
+      {
+         e.printStackTrace();
+      }
+      return null;
    }
 }

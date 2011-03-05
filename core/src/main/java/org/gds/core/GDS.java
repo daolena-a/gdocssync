@@ -21,7 +21,7 @@ package org.gds.core;
 
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
-import org.gds.gui.tray.GDSTray;
+import org.gds.gui.GDSTray;
 import org.gds.watcher.Listener;
 
 /**

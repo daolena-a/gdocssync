@@ -1,0 +1,27 @@
+How to build this project
+
+1. Setup external repository to settings.xml :
+
+<settings>
+   <profiles>
+      <profile>
+         <id>gds</id>
+         <activation>
+            <activeByDefault>false</activeByDefault>
+         </activation>
+         <properties>
+            <gds.watched.directory>/path/to/watched/directory</gds.watched.directory>
+         </properties>
+         <repositories>
+            <repository>
+               <id>gds</id>
+               <name>defrancea repository</name>
+               <url>http://defrancea-mvn-dep.googlecode.com/svn/trunk/maven/</url>
+            </repository>
+         </repositories>
+      </profile>
+   </profiles>
+<settings>
+
+2. Run build with gds maven profile :
+mvn clean install -Pgds

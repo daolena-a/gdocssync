@@ -19,12 +19,25 @@
          <artifactId>gds.watcher</artifactId>
       </dependency>
       <dependency>
+         <groupId>org.gds</groupId>
+         <artifactId>gds.gui</artifactId>
+      </dependency>
+      <dependency>
          <groupId>jnotify</groupId>
          <artifactId>jnotify</artifactId>
       </dependency>
+      
       <dependency>
-         <groupId>org.gds</groupId>
-         <artifactId>gds.gui</artifactId>
+         <groupId>gdata</groupId>
+         <artifactId>gdata-core</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>gdata</groupId>
+         <artifactId>gdata-docs</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>gdata</groupId>
+         <artifactId>gdata-media</artifactId>
       </dependency>
    </dependencies>
 
