@@ -17,41 +17,31 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.watcher;
+package org.gds.monitoring.remote;
 
-import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyListener;
+import org.gds.fs.GDSFSManager;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class Listener implements JNotifyListener
+public class RemoteListener implements ServerListener
 {
+   private GDSFSManager fsManager;
 
-   public static final int mask =
-         JNotify.FILE_CREATED |
-         JNotify.FILE_DELETED |
-         JNotify.FILE_MODIFIED |
-         JNotify.FILE_RENAMED;
-
-   public void fileCreated(final int i, final String s, final String s1)
+   public RemoteListener(final GDSFSManager fsManager)
    {
-      System.out.println("created");
+      if (fsManager == null)
+      {
+         throw new IllegalArgumentException("fsManager is null");
+      }
+      this.fsManager = fsManager;
    }
 
-   public void fileDeleted(final int i, final String s, final String s1)
+   public void onFound(final ServerEvent se)
    {
-      System.out.println("removed");
-   }
-
-   public void fileModified(final int i, final String s, final String s1)
-   {
-      System.out.println("updated");
-   }
-
-   public void fileRenamed(final int i, final String s, final String s1, final String s2)
-   {
-      System.out.println("renamed");
+      fsManager.indexFile(new File(se.getFileId()));
    }
 }

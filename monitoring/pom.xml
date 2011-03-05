@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <parent>
+      <artifactId>gds.project</artifactId>
+      <groupId>org.gds</groupId>
+      <version>1.0.0-Alpha01-SNAPSHOT</version>
+   </parent>
+   <modelVersion>4.0.0</modelVersion>
+
+   <artifactId>gds.monitoring</artifactId>
+
+   <name>Google Doc Synchronizer - Monitoring</name>
+
+   <dependencies>
+      <dependency>
+         <groupId>gdata</groupId>
+         <artifactId>gdata-client</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>gdata</groupId>
+         <artifactId>gdata-core</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>gdata</groupId>
+         <artifactId>gdata-docs</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>gdata</groupId>
+         <artifactId>gdata-media</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gds</groupId>
+         <artifactId>gds.fs</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>javax.mail</groupId>
+         <artifactId>mail</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>jnotify</groupId>
+         <artifactId>jnotify</artifactId>
+      </dependency>
+   </dependencies>
+</project>

@@ -17,25 +17,29 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.core;
+package org.gds.monitoring.remote;
 
 import com.google.gdata.data.docs.DocumentListEntry;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class RemoteWatcherService extends Thread
+public class RemoteMonitoringService extends Thread
 {
    private GoogleDocClient googleDocClient;
    private int delay;
+   private List<ServerListener> listeners = new LinkedList<ServerListener>();
 
-   public RemoteWatcherService(final GoogleDocClient googleDocClient)
+   public RemoteMonitoringService(final GoogleDocClient googleDocClient)
    {
       this(googleDocClient, 10);
    }
 
-   public RemoteWatcherService(final GoogleDocClient googleDocClient, final int delay)
+   public RemoteMonitoringService(final GoogleDocClient googleDocClient, final int delay)
    {
       if (googleDocClient == null)
       {
@@ -53,10 +57,11 @@ public class RemoteWatcherService extends Thread
       {
          for (DocumentListEntry documentListEntry : googleDocClient.getFiles().getEntries())
          {
-            System.out.println("Title " + documentListEntry.getTitle().getPlainText());
-            System.out.println("Id " + documentListEntry.getId());
+            fireEvent(new ServerEvent(documentListEntry.getDocId()));
+            /*System.out.println("Title " + documentListEntry.getTitle().getPlainText());
+            System.out.println("Id " + documentListEntry.getDocId());
             System.out.println("tag " + documentListEntry.getEtag());
-            System.out.println();
+            System.out.println();*/
          }
          try
          {
@@ -67,5 +72,18 @@ public class RemoteWatcherService extends Thread
             e.printStackTrace(); // TODO : log
          }
       }
+   }
+
+   private void fireEvent(ServerEvent se)
+   {
+      for(ServerListener serverListener : listeners)
+      {
+         serverListener.onFound(se);
+      }
+   }
+
+   public void addListener(ServerListener serverListener)
+   {
+      listeners.add(serverListener);
    }
 }

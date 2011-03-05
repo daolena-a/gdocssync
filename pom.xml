@@ -15,7 +15,7 @@
       <dependencies>
          <dependency>
             <groupId>org.gds</groupId>
-            <artifactId>gds.watcher</artifactId>
+            <artifactId>gds.monitoring</artifactId>
             <version>1.0.0-Alpha01-SNAPSHOT</version>
          </dependency>
          <dependency>
@@ -93,7 +93,7 @@
    </build>
 
    <modules>
-      <module>watcher</module>
+      <module>monitoring</module>
       <module>core</module>
       <module>gui</module>
       <module>fs</module>

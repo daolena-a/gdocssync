@@ -19,15 +19,15 @@
 
 package org.gds.core;
 
-import com.google.gdata.data.docs.DocumentEntry;
-import com.google.gdata.data.docs.DocumentListEntry;
-import com.google.gdata.util.AuthenticationException;
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
 import org.gds.fs.GDSFSManager;
 import org.gds.fs.unix.GDSFSUnixManager;
 import org.gds.gui.GDSTray;
-import org.gds.watcher.Listener;
+import org.gds.monitoring.local.LocalListener;
+import org.gds.monitoring.remote.GoogleDocClient;
+import org.gds.monitoring.remote.RemoteListener;
+import org.gds.monitoring.remote.RemoteMonitoringService;
 
 import java.io.File;
 
@@ -41,16 +41,16 @@ public class GDS
    private GDSFSManager fsManager;
    private GDSTray tray;
    private GoogleDocClient googleDocClient;
-   private Thread remoteMonitor;
+   private RemoteMonitoringService remoteMonitor;
 
-   private GDS(String[] argv) throws AuthenticationException // TODO : clean this exception
+   private GDS(String[] argv) // TODO : clean this exception
    {
       // TODO : clean this config
       monitoredFile = new File(argv[0]);
       googleDocClient = new GoogleDocClient(argv[1], argv[2]);
       fsManager = new GDSFSUnixManager(monitoredFile);
       tray = new GDSTray();
-      remoteMonitor = new RemoteWatcherService(googleDocClient);
+      remoteMonitor = new RemoteMonitoringService(googleDocClient);
    }
 
    public void start()
@@ -58,7 +58,7 @@ public class GDS
       fsManager.init();
       startTray();
       startLocalMonitoring(monitoredFile);
-      //startRemoteMonitoring();
+      startRemoteMonitoring();
    }
 
    private void startTray()
@@ -70,7 +70,7 @@ public class GDS
    {
       try
       {
-         JNotify.addWatch(monitoredFile.getAbsolutePath(), Listener.mask, true, new Listener());
+         JNotify.addWatch(monitoredFile.getAbsolutePath(), LocalListener.mask, true, new LocalListener());
       }
       catch (JNotifyException e)
       {
@@ -79,10 +79,11 @@ public class GDS
    }
    private void startRemoteMonitoring()
    {
+      remoteMonitor.addListener(new RemoteListener(fsManager));
       remoteMonitor.start();
    }
 
-   public static void main(String[] argv) throws JNotifyException, InterruptedException, AuthenticationException
+   public static void main(String[] argv) throws JNotifyException, InterruptedException
    {
       new GDS(argv).start();
    }

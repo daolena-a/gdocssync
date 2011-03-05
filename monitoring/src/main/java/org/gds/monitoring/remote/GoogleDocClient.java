@@ -17,7 +17,7 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.core;
+package org.gds.monitoring.remote;
 
 import com.google.gdata.client.docs.DocsService;
 import com.google.gdata.data.docs.DocumentListFeed;
@@ -37,11 +37,18 @@ public class GoogleDocClient
    private static String password;
    private static DocsService client = new DocsService("gds");
 
-   public GoogleDocClient(String username, String password) throws AuthenticationException
+   public GoogleDocClient(String username, String password)
    {
       this.username = username;
       this.password = password;
-      client.setUserCredentials(username, password);
+      try
+      {
+         client.setUserCredentials(username, password);
+      }
+      catch (AuthenticationException e)
+      {
+         e.printStackTrace();  // TODO : manage
+      }
    }
 
    public DocumentListFeed getFiles()

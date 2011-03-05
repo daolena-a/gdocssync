@@ -16,7 +16,7 @@
    <dependencies>
       <dependency>
          <groupId>org.gds</groupId>
-         <artifactId>gds.watcher</artifactId>
+         <artifactId>gds.monitoring</artifactId>
       </dependency>
       <dependency>
          <groupId>org.gds</groupId>
@@ -32,27 +32,6 @@
          <artifactId>jnotify</artifactId>
       </dependency>
 
-      <dependency>
-         <groupId>gdata</groupId>
-         <artifactId>gdata-client</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>gdata</groupId>
-         <artifactId>gdata-core</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>gdata</groupId>
-         <artifactId>gdata-docs</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>gdata</groupId>
-         <artifactId>gdata-media</artifactId>
-      </dependency>
-
-      <dependency>
-         <groupId>javax.mail</groupId>
-         <artifactId>mail</artifactId>
-      </dependency>
       <dependency>
          <groupId>com.google.collections</groupId>
          <artifactId>google-collections</artifactId>
