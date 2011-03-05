@@ -20,7 +20,7 @@
          </dependency>
          <dependency>
             <groupId>org.gds</groupId>
-            <artifactId>gds.launcher</artifactId>
+            <artifactId>gds.core</artifactId>
             <version>1.0.0-Alpha01</version>
          </dependency>
          <dependency>

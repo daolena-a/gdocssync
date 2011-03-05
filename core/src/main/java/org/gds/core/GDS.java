@@ -17,16 +17,12 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.launcher;
+package org.gds.core;
 
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
 import org.gds.gui.tray.GDSTray;
 import org.gds.watcher.Listener;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>

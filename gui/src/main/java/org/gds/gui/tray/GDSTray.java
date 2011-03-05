@@ -54,6 +54,16 @@ public class GDSTray
       }
    }
 
+   public void upToDate()
+   {
+
+   }
+
+   public void updating()
+   {
+      
+   }
+
    private PopupMenu createPopumMenu()
    {
       return new PopupMenu();
