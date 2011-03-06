@@ -19,8 +19,12 @@
 
 package org.gds.monitoring.remote;
 
+import com.google.gdata.data.Link;
 import com.google.gdata.data.docs.DocumentListEntry;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,13 +59,28 @@ public class RemoteMonitoringService extends Thread
    {
       while(true)
       {
+         for (DocumentListEntry documentListEntry : googleDocClient.getFolders()
+                 .getEntries())
+         {
+            fireEvent(new ServerEvent(
+                    documentListEntry.getDocId(),
+                    documentListEntry.getEtag(),
+                    documentListEntry.getTitle().getPlainText(),
+                    parentId(documentListEntry.getParentLinks())
+            ),
+                    Event.UPDATE_DIRECTORY
+            );
+         }
          for (DocumentListEntry documentListEntry : googleDocClient.getFiles().getEntries())
          {
-            fireEvent(new ServerEvent(documentListEntry.getDocId()));
-            /*System.out.println("Title " + documentListEntry.getTitle().getPlainText());
-            System.out.println("Id " + documentListEntry.getDocId());
-            System.out.println("tag " + documentListEntry.getEtag());
-            System.out.println();*/
+            fireEvent(new ServerEvent(
+                    documentListEntry.getDocId(),
+                    documentListEntry.getEtag(),
+                    documentListEntry.getTitle().getPlainText(),
+                    parentId(documentListEntry.getParentLinks())
+            ),
+                    Event.UPDATE_FILE
+            );
          }
          try
          {
@@ -74,16 +93,41 @@ public class RemoteMonitoringService extends Thread
       }
    }
 
-   private void fireEvent(ServerEvent se)
+   private void fireEvent(ServerEvent se, Event event)
    {
       for(ServerListener serverListener : listeners)
       {
-         serverListener.onFound(se);
+         switch (event)
+         {
+            case UPDATE_DIRECTORY:
+               serverListener.onDirectorySync(se);
+               break;
+            case UPDATE_FILE:
+               serverListener.onFileSync(se);
+               break;
+         }
       }
+   }
+
+   private String[] parentId(List<Link> links)
+   {
+      List<String> parents = new ArrayList<String>();
+      for (Link link : links)
+      {
+         String httpLink = link.getHref();
+         parents.add(httpLink.substring(httpLink.indexOf("%3A")+3));
+      }
+      return parents.toArray(new String[]{});
    }
 
    public void addListener(ServerListener serverListener)
    {
       listeners.add(serverListener);
+   }
+
+   enum Event
+   {
+      UPDATE_FILE,
+      UPDATE_DIRECTORY
    }
 }

@@ -19,9 +19,9 @@
 
 package org.gds.monitoring.remote;
 
+import org.gds.fs.GDSDir;
 import org.gds.fs.GDSFSManager;
-
-import java.io.File;
+import org.gds.fs.GDSFile;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -40,8 +40,22 @@ public class RemoteListener implements ServerListener
       this.fsManager = fsManager;
    }
 
-   public void onFound(final ServerEvent se)
+   public void onFileSync(final ServerEvent se)
    {
-      fsManager.indexFile(new File(se.getFileId()));
+      GDSFile gdsFile = new GDSFile();
+      gdsFile.setDocId(se.getFileId());
+      gdsFile.setEtag(se.getEtag());
+      gdsFile.setTitle(se.getTitle());
+      fsManager.updateFileIndex(gdsFile);
+   }
+
+   public void onDirectorySync(final ServerEvent se)
+   {
+      GDSDir gdsDir = new GDSDir();
+      gdsDir.setDocId(se.getFileId());
+      gdsDir.setEtag(se.getEtag());
+      gdsDir.setTitle(se.getTitle());
+      gdsDir.setParent(se.getParents());
+      fsManager.updateDirIndex(gdsDir);
    }
 }

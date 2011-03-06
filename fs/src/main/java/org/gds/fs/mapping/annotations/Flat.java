@@ -17,14 +17,19 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.remote;
+package org.gds.fs.mapping.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public interface ServerListener
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface Flat
 {
-   void onFileSync(ServerEvent se);
-   void onDirectorySync(ServerEvent se);
 }

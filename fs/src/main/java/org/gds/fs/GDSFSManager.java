@@ -19,7 +19,10 @@
 
 package org.gds.fs;
 
+import org.gds.fs.mapping.FlatMapping;
+
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -30,7 +33,9 @@ public abstract class GDSFSManager
 {
    protected File monitoredFile;
    private File indexFileDirectory;
+   private File indexDirDirectory;
    private File sysDirectory;
+   private FlatMapping mapping;
 
    protected GDSFSManager(final File monitoredFile)
    {
@@ -39,6 +44,7 @@ public abstract class GDSFSManager
          throw new IllegalArgumentException("monitoredFile is null");
       }
       this.monitoredFile = monitoredFile;
+      this.mapping = new FlatMapping();
    }
 
    public void init()
@@ -56,17 +62,44 @@ public abstract class GDSFSManager
       {
          indexFileDirectory.mkdir();
       }
+
+      //
+      indexDirDirectory = new File(getSysDirectory(), "folders");
+      if (!indexDirDirectory.exists())
+      {
+         indexDirDirectory.mkdir();
+      }
    }
 
-   public void indexFile(File file)
+   public void updateFileIndex(GDSFile file)
    {
+      File indexedFile = new File(indexFileDirectory, file.getDocId());
       try
       {
-         new File(indexFileDirectory, file.getPath()).createNewFile();
+         // TODO : check if etag has changed
+         FileWriter fw = new FileWriter(indexedFile, false);
+         fw.append(mapping.toString(file));
+         fw.flush();
       }
       catch (IOException e)
       {
-         e.printStackTrace();  // TODO : manage
+         e.printStackTrace(); // TODO : manage
+      }
+   }
+
+   public void updateDirIndex(GDSDir dir)
+   {
+      File indexedFile = new File(indexDirDirectory, dir.getDocId());
+      try
+      {
+         // TODO : check if etag has changed
+         FileWriter fw = new FileWriter(indexedFile, false);
+         fw.append(mapping.toString(dir));
+         fw.flush();
+      }
+      catch (IOException e)
+      {
+         e.printStackTrace(); // TODO : manage
       }
    }
 

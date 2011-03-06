@@ -41,6 +41,7 @@ public class GoogleDocClient
    {
       this.username = username;
       this.password = password;
+      
       try
       {
          client.setUserCredentials(username, password);

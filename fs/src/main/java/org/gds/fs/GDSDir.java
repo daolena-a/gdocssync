@@ -17,14 +17,68 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.remote;
+package org.gds.fs;
+
+import org.gds.fs.mapping.annotations.Flat;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public interface ServerListener
+public class GDSDir
 {
-   void onFileSync(ServerEvent se);
-   void onDirectorySync(ServerEvent se);
+   private String docId;
+
+   @Flat
+   private String etag;
+
+   @Flat
+   private String title;
+
+   @Flat
+   private String[] parent;
+
+   public GDSDir()
+   {
+   }
+
+   public String getDocId()
+   {
+      return docId;
+   }
+
+   public void setDocId(final String docId)
+   {
+      this.docId = docId;
+   }
+
+   public String getEtag()
+   {
+      return etag;
+   }
+
+   public void setEtag(final String etag)
+   {
+      this.etag = etag;
+   }
+
+   public String getTitle()
+   {
+      return title;
+   }
+
+   public void setTitle(final String title)
+   {
+      this.title = title;
+   }
+
+   public String[] getParent()
+   {
+      return parent;
+   }
+
+   public void setParent(final String[] parent)
+   {
+      this.parent = parent;
+   }
 }

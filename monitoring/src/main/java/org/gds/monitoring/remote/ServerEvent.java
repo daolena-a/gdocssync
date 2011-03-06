@@ -26,14 +26,35 @@ package org.gds.monitoring.remote;
 public class ServerEvent
 {
    private String fileId;
+   private String etag;
+   private String title;
+   private String[] parents;
 
-   public ServerEvent(final String fileId)
+   public ServerEvent(final String fileId, final String etag, final String title, final String[] parents)
    {
       this.fileId = fileId;
+      this.etag = etag;
+      this.title = title;
+      this.parents = parents;
    }
 
    public String getFileId()
    {
       return fileId;
+   }
+
+   public String getEtag()
+   {
+      return etag;
+   }
+
+   public String getTitle()
+   {
+      return title;
+   }
+
+   public String[] getParents()
+   {
+      return parents;
    }
 }
