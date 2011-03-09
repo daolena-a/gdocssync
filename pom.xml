@@ -42,7 +42,7 @@
          <dependency>
             <groupId>jnotify</groupId>
             <artifactId>jnotify</artifactId>
-            <version>0.93</version>
+            <version>0.93-PATCH01</version>
          </dependency>
 
          <dependency>
