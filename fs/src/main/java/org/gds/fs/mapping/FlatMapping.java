@@ -24,6 +24,8 @@ import org.gds.fs.mapping.annotations.Flat;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Scanner;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -48,22 +50,22 @@ public class FlatMapping
                {
                   continue;
                }
-               else if (value.getClass().isArray())
+               else if (value instanceof Collection)
                {
-                  Object[] tvalue = (Object[]) value;
-                  if (tvalue.length == 0)
+                  Collection collection = (Collection) value;
+                  if (collection.size() == 0)
                   {
                      continue;
                   }
                   else
                   {
-                     for (Object o : tvalue)
+                     for (Object o : collection)
                      {
                         sb
                            .append(field.getName())
                            .append(": ")
                            .append(o)
-                           .append("\n");
+                           .append(System.getProperty("line.separator"));
                      }
                   }
                }
@@ -73,7 +75,7 @@ public class FlatMapping
                      .append(field.getName())
                      .append(": ")
                      .append(value)
-                     .append("\n");
+                     .append(System.getProperty("line.separator"));
                }
             }
             catch (NoSuchMethodException e)
@@ -95,6 +97,51 @@ public class FlatMapping
 
    public <T> T toObject(String src, Class<T> clazz)
    {
+      try
+      {
+         T t = clazz.newInstance();
+         Scanner sc = new Scanner(src);
+         while (sc.hasNextLine())
+         {
+            String line = sc.nextLine();
+            int index = line.indexOf(" ");
+            String key = line.substring(0, index - 1);
+            String value = line.substring(index + 1);
+            Field field = clazz.getDeclaredField(key);
+            if (!Collection.class.isAssignableFrom(field.getType()))
+            {
+               Method method = clazz.getMethod("set" + capitalize(key), field.getType());
+               method.invoke(t, value);
+            }
+            else
+            {
+               Method getter = clazz.getMethod("get" + capitalize(key));
+               Collection collection = (Collection) getter.invoke(t);
+               collection.add(value);
+            }
+         }
+         return t;
+      }
+      catch (InstantiationException e)
+      {
+         e.printStackTrace(); // TODO : manage
+      }
+      catch (IllegalAccessException e)
+      {
+         e.printStackTrace(); // TODO : manage
+      }
+      catch (NoSuchMethodException e)
+      {
+         e.printStackTrace(); // TODO : manage
+      }
+      catch (NoSuchFieldException e)
+      {
+         e.printStackTrace(); // TODO : manage
+      }
+      catch (InvocationTargetException e)
+      {
+         e.printStackTrace(); // TODO : manage
+      }
       return null;
    }
 

@@ -109,7 +109,7 @@ public class RemoteMonitoringService extends Thread
       }
    }
 
-   private String[] parentId(List<Link> links)
+   private List<String> parentId(List<Link> links)
    {
       List<String> parents = new ArrayList<String>();
       for (Link link : links)
@@ -117,7 +117,7 @@ public class RemoteMonitoringService extends Thread
          String httpLink = link.getHref();
          parents.add(httpLink.substring(httpLink.indexOf("%3A")+3));
       }
-      return parents.toArray(new String[]{});
+      return parents;
    }
 
    public void addListener(ServerListener serverListener)

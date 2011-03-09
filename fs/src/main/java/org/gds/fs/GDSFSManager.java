@@ -36,6 +36,7 @@ public abstract class GDSFSManager
    private File indexDirDirectory;
    private File sysDirectory;
    private FlatMapping mapping;
+   private IndexCache cache;
 
    protected GDSFSManager(final File monitoredFile)
    {
@@ -45,6 +46,7 @@ public abstract class GDSFSManager
       }
       this.monitoredFile = monitoredFile;
       this.mapping = new FlatMapping();
+      this.cache = new IndexCache();
    }
 
    public void init()
@@ -69,6 +71,9 @@ public abstract class GDSFSManager
       {
          indexDirDirectory.mkdir();
       }
+
+      //
+      cache.init(getSysDirectory(), mapping);
    }
 
    public void updateFileIndex(GDSFile file)

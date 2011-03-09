@@ -46,6 +46,10 @@ public class GDSFile
 
    public void setDocId(final String docId)
    {
+      if (docId == null)
+      {
+         throw new IllegalArgumentException("docId is null");
+      }
       this.docId = docId;
    }
 
@@ -67,5 +71,33 @@ public class GDSFile
    public void setTitle(final String title)
    {
       this.title = title;
+   }
+
+   @Override
+   public boolean equals(final Object o)
+   {
+      if (this == o)
+      {
+         return true;
+      }
+      if (o == null || getClass() != o.getClass())
+      {
+         return false;
+      }
+
+      GDSFile gdsFile = (GDSFile) o;
+
+      if (docId != null ? !docId.equals(gdsFile.docId) : gdsFile.docId != null)
+      {
+         return false;
+      }
+
+      return true;
+   }
+
+   @Override
+   public int hashCode()
+   {
+      return docId != null ? docId.hashCode() : 0;
    }
 }

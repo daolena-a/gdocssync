@@ -20,7 +20,6 @@
 package org.gds.core;
 
 import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyException;
 import org.gds.fs.GDSFSManager;
 import org.gds.fs.unix.GDSFSUnixManager;
 import org.gds.gui.GDSTray;
@@ -72,9 +71,9 @@ public class GDS
       {
          JNotify.addWatch(monitoredFile.getAbsolutePath(), LocalListener.mask, true, new LocalListener());
       }
-      catch (JNotifyException e)
+      catch (Throwable e)
       {
-         e.printStackTrace(); // TODO : log/manage
+         e.printStackTrace();  // TODO : manage
       }
    }
    private void startRemoteMonitoring()
@@ -83,7 +82,7 @@ public class GDS
       remoteMonitor.start();
    }
 
-   public static void main(String[] argv) throws JNotifyException, InterruptedException
+   public static void main(String[] argv) throws InterruptedException
    {
       new GDS(argv).start();
    }

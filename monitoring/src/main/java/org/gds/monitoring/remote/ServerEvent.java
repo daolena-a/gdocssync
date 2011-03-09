@@ -19,6 +19,8 @@
 
 package org.gds.monitoring.remote;
 
+import java.util.List;
+
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
@@ -28,9 +30,9 @@ public class ServerEvent
    private String fileId;
    private String etag;
    private String title;
-   private String[] parents;
+   private List<String> parents;
 
-   public ServerEvent(final String fileId, final String etag, final String title, final String[] parents)
+   public ServerEvent(final String fileId, final String etag, final String title, final List<String> parents)
    {
       this.fileId = fileId;
       this.etag = etag;
@@ -53,7 +55,7 @@ public class ServerEvent
       return title;
    }
 
-   public String[] getParents()
+   public List<String> getParents()
    {
       return parents;
    }
