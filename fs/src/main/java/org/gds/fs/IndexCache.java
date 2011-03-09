@@ -20,7 +20,6 @@
 package org.gds.fs;
 
 import org.gds.fs.mapping.FlatMapping;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,7 +62,7 @@ public class IndexCache
    {
       if (initialized)
       {
-         throw new InvalidStateException("IndexCache is already initialized");
+         throw new RuntimeException("IndexCache is already initialized");
       }
 
       //
