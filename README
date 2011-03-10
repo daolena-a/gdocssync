@@ -18,7 +18,7 @@ How to build this project
             <repository>
                <id>gds</id>
                <name>defrancea repository</name>
-               <url>http://defrancea-mvn-dep.googlecode.com/svn/trunk/maven/</url>
+               <url>http://defrancea-mvn-dep.googlecode.com/svn/trunk/maven</url>
             </repository>
          </repositories>
       </profile>
@@ -27,3 +27,6 @@ How to build this project
 
 2. Run build with gds maven profile :
 mvn clean install -Pgds
+
+3. Run packaged output with run profile :
+mvn clean install -Pgds,run

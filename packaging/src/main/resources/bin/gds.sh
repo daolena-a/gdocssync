@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -jar gds.jar $@ -Djava.library.path=.
+java -Djava.library.path=. -jar gds.jar $@
