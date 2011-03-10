@@ -59,9 +59,7 @@
                               <argument>${gds.watched.directory}</argument>
                               <argument>${gds.login}</argument>
                               <argument>${gds.password}</argument>
-                              <argument>-Djava.library.path=${baseUri}/core/classes/native</argument>
                            </arguments>
-                           <commandlineArgs>${gds.watched.directory} ${gds.login} ${gds.password} -Djava.library.path=${baseUri}/core/classes/native</commandlineArgs>
                         </configuration>
                      </execution>
                   </executions>

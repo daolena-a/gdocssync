@@ -98,5 +98,6 @@
       <module>gui</module>
       <module>fs</module>
       <module>unix</module>
+      <module>packaging</module>
    </modules>
 </project>
