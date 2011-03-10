@@ -81,10 +81,15 @@ public abstract class GDSFSManager
       File indexedFile = new File(indexFileDirectory, file.getDocId());
       try
       {
-         // TODO : check if etag has changed
-         FileWriter fw = new FileWriter(indexedFile, false);
-         fw.append(mapping.toString(file));
-         fw.flush();
+         GDSFile gdsFile = cache.getFile(file.getDocId());
+         String eTag = (gdsFile == null ? "" : gdsFile.getEtag());
+         if (!eTag.equals(file.getEtag()))
+         {
+            FileWriter fw = new FileWriter(indexedFile, false);
+            fw.append(mapping.toString(file));
+            fw.flush();
+         }
+         cache.addFile(file);
       }
       catch (IOException e)
       {
@@ -97,10 +102,15 @@ public abstract class GDSFSManager
       File indexedFile = new File(indexDirDirectory, dir.getDocId());
       try
       {
-         // TODO : check if etag has changed
-         FileWriter fw = new FileWriter(indexedFile, false);
-         fw.append(mapping.toString(dir));
-         fw.flush();
+         GDSDir gdsDir = cache.getFolder(dir.getDocId());
+         String eTag = (gdsDir == null ? "" : gdsDir.getEtag());
+         if (!eTag.equals(dir.getEtag()))
+         {
+            FileWriter fw = new FileWriter(indexedFile, false);
+            fw.append(mapping.toString(dir));
+            fw.flush();
+         }
+         cache.addFolder(dir);
       }
       catch (IOException e)
       {

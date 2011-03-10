@@ -48,7 +48,7 @@ public class IndexCache
       folders.put(folder.getDocId(), folder);
    }
 
-   public GDSFile getfile(String id)
+   public GDSFile getFile(String id)
    {
       return files.get(id);
    }
@@ -71,7 +71,7 @@ public class IndexCache
       {
          GDSFile f = mapping.toObject(readFile(file), GDSFile.class);
          f.setDocId(file.getName());
-         files.put(file.getAbsolutePath(), f);
+         files.put(file.getName(), f);
       }
 
       //
@@ -80,7 +80,7 @@ public class IndexCache
       {
          GDSDir f = mapping.toObject(readFile(folder), GDSDir.class);
          f.setDocId(folder.getName());
-         folders.put(folder.getAbsolutePath(), f);
+         folders.put(folder.getName(), f);
       }
       initialized = true;
    }
