@@ -19,6 +19,8 @@
 
 package org.gds.monitoring.remote;
 
+import java.util.List;
+
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
@@ -26,5 +28,7 @@ package org.gds.monitoring.remote;
 public interface ServerListener
 {
    void onFileSync(ServerEvent se);
+   void onFileEndUpdate(ServerEvent se);
    void onDirectorySync(ServerEvent se);
+   void onDirectoryEndUpdate(ServerEvent se);
 }

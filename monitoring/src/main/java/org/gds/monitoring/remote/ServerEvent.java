@@ -20,6 +20,7 @@
 package org.gds.monitoring.remote;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -31,13 +32,15 @@ public class ServerEvent
    private String etag;
    private String title;
    private List<String> parents;
+   private Set<String> allIds;
 
-   public ServerEvent(final String fileId, final String etag, final String title, final List<String> parents)
+   public ServerEvent(String fileId, String etag, String title, List<String> parents, Set<String> allIds)
    {
       this.fileId = fileId;
       this.etag = etag;
       this.title = title;
       this.parents = parents;
+      this.allIds = allIds;
    }
 
    public String getFileId()
@@ -58,5 +61,10 @@ public class ServerEvent
    public List<String> getParents()
    {
       return parents;
+   }
+
+   public Set<String> getAllIds()
+   {
+      return allIds;
    }
 }

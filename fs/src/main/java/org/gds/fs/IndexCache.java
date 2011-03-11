@@ -27,6 +27,7 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -102,5 +103,25 @@ public class IndexCache
          e.printStackTrace();
          return null;
       }
+   }
+
+   public void removeFile(String id)
+   {
+      files.remove(id);
+   }
+
+   public void removeFolder(String id)
+   {
+      folders.remove(id);
+   }
+
+   public Set<String> getFilesName()
+   {
+      return files.keySet();
+   }
+
+   public Set<String> getDirectoriesName()
+   {
+      return folders.keySet();
    }
 }

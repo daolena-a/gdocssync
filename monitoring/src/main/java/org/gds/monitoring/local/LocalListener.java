@@ -37,21 +37,21 @@ public class LocalListener implements JNotifyListener
 
    public void fileCreated(final int i, final String s, final String s1)
    {
-      System.out.println("created");
+      System.out.println("created : " + s + " " + s1);
    }
 
    public void fileDeleted(final int i, final String s, final String s1)
    {
-      System.out.println("removed");
+      System.out.println("removed : " + s + " " + s1);
    }
 
    public void fileModified(final int i, final String s, final String s1)
    {
-      System.out.println("updated");
+      System.out.println("updated : " + s + " " + s1);
    }
 
    public void fileRenamed(final int i, final String s, final String s1, final String s2)
    {
-      System.out.println("renamed");
+      System.out.println("renamed : " + s + " " + s1);
    }
 }

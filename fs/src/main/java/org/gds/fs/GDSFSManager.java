@@ -24,6 +24,8 @@ import org.gds.fs.mapping.FlatMapping;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -81,15 +83,15 @@ public abstract class GDSFSManager
       File indexedFile = new File(indexFileDirectory, file.getDocId());
       try
       {
-         GDSFile gdsFile = cache.getFile(file.getDocId());
+         GDSFile gdsFile  = cache.getFile(file.getDocId());
          String eTag = (gdsFile == null ? "" : gdsFile.getEtag());
          if (!eTag.equals(file.getEtag()))
          {
             FileWriter fw = new FileWriter(indexedFile, false);
             fw.append(mapping.toString(file));
             fw.flush();
+            cache.addFile(file);
          }
-         cache.addFile(file);
       }
       catch (IOException e)
       {
@@ -109,13 +111,38 @@ public abstract class GDSFSManager
             FileWriter fw = new FileWriter(indexedFile, false);
             fw.append(mapping.toString(dir));
             fw.flush();
+            cache.addFolder(dir);
          }
-         cache.addFolder(dir);
+
       }
       catch (IOException e)
       {
          e.printStackTrace(); // TODO : manage
       }
+   }
+
+   public void deleteFileIndex(String id)
+   {
+      File indexedFile = new File(indexFileDirectory, id);
+      indexedFile.delete();
+      cache.removeFile(id);
+   }
+
+   public void deleteDirIndex(String id)
+   {
+      File indexedDir = new File(indexDirDirectory, id);
+      indexedDir.delete();
+      cache.removeFolder(id);
+   }
+
+   public Set<String> getFilesName()
+   {
+      return cache.getFilesName();
+   }
+
+   public Set<String> getDirectoriesName()
+   {
+      return cache.getDirectoriesName();
    }
 
    abstract protected File getSysDirectory();

@@ -23,6 +23,10 @@ import org.gds.fs.GDSDir;
 import org.gds.fs.GDSFSManager;
 import org.gds.fs.GDSFile;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
@@ -49,6 +53,16 @@ public class RemoteListener implements ServerListener
       fsManager.updateFileIndex(gdsFile);
    }
 
+   public void onFileEndUpdate(final ServerEvent se)
+   {
+      Set<String> deletedFiles = new HashSet(fsManager.getFilesName());
+      deletedFiles.removeAll(se.getAllIds());
+      for (String id : deletedFiles)
+      {
+         fsManager.deleteFileIndex(id);
+      }
+   }
+
    public void onDirectorySync(final ServerEvent se)
    {
       GDSDir gdsDir = new GDSDir();
@@ -57,5 +71,15 @@ public class RemoteListener implements ServerListener
       gdsDir.setTitle(se.getTitle());
       gdsDir.setParent(se.getParents());
       fsManager.updateDirIndex(gdsDir);
+   }
+
+   public void onDirectoryEndUpdate(final ServerEvent se)
+   {
+      Set<String> deletedDirs = new HashSet(fsManager.getDirectoriesName());
+      deletedDirs.removeAll(se.getAllIds());
+      for (String id : deletedDirs)
+      {
+         fsManager.deleteDirIndex(id);
+      }
    }
 }
