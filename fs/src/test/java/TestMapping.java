@@ -16,7 +16,7 @@ import java.util.Scanner;
  * To change this template use File | Settings | File Templates.
  */
 public class TestMapping  {
-
+    //TODO ASSERTS!!!
     @Test
     public void testToStringForDir() throws Throwable{
         GDSDir gdsDir = new GDSDir();
@@ -89,6 +89,7 @@ public class TestMapping  {
          String value = "etag: testunit"+System.getProperty("line.separator") + "title: testunit"+System.getProperty("line.separator");
          FlatMapping fm = new FlatMapping();
         GDSDir dir = fm.toObject(value, GDSDir.class);
+
     }
 
 
