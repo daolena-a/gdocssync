@@ -50,11 +50,14 @@ public class RemoteListener implements ServerListener
       gdsFile.setDocId(se.getFileId());
       gdsFile.setEtag(se.getEtag());
       gdsFile.setTitle(se.getTitle());
+      gdsFile.setParents(se.getParents());
       fsManager.updateFileIndex(gdsFile);
    }
 
    public void onFileEndUpdate(final ServerEvent se)
    {
+      fsManager.resetPathFileIndex();
+      
       Set<String> deletedFiles = new HashSet(fsManager.getFilesName());
       deletedFiles.removeAll(se.getAllIds());
       for (String id : deletedFiles)
@@ -69,12 +72,14 @@ public class RemoteListener implements ServerListener
       gdsDir.setDocId(se.getFileId());
       gdsDir.setEtag(se.getEtag());
       gdsDir.setTitle(se.getTitle());
-      gdsDir.setParent(se.getParents());
+      gdsDir.setParents(se.getParents());
       fsManager.updateDirIndex(gdsDir);
    }
 
    public void onDirectoryEndUpdate(final ServerEvent se)
    {
+      fsManager.resetPathDirIndex();
+
       Set<String> deletedDirs = new HashSet(fsManager.getDirectoriesName());
       deletedDirs.removeAll(se.getAllIds());
       for (String id : deletedDirs)

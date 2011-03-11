@@ -56,7 +56,7 @@ public class GDS
    {
       fsManager.init();
       startTray();
-      startLocalMonitoring(monitoredFile);
+      //startLocalMonitoring(monitoredFile);
       startRemoteMonitoring();
    }
 

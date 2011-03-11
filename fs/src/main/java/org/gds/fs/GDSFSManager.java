@@ -24,6 +24,7 @@ import org.gds.fs.mapping.FlatMapping;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,7 @@ public abstract class GDSFSManager
    protected File monitoredFile;
    private File indexFileDirectory;
    private File indexDirDirectory;
+   private File indexPathDirectory;
    private File sysDirectory;
    private FlatMapping mapping;
    private IndexCache cache;
@@ -75,49 +77,84 @@ public abstract class GDSFSManager
       }
 
       //
+      indexPathDirectory = new File(getSysDirectory(), "paths");
+      if (!indexPathDirectory.exists())
+      {
+         indexPathDirectory.mkdir();
+      }
+
+      //
       cache.init(getSysDirectory(), mapping);
    }
 
    public void updateFileIndex(GDSFile file)
    {
       File indexedFile = new File(indexFileDirectory, file.getDocId());
-      try
+      GDSFile gdsFile  = cache.getFile(file.getDocId());
+      String eTag = (gdsFile == null ? "" : gdsFile.getEtag());
+      if (!eTag.equals(file.getEtag()))
       {
-         GDSFile gdsFile  = cache.getFile(file.getDocId());
-         String eTag = (gdsFile == null ? "" : gdsFile.getEtag());
-         if (!eTag.equals(file.getEtag()))
-         {
-            FileWriter fw = new FileWriter(indexedFile, false);
-            fw.append(mapping.toString(file));
-            fw.flush();
-            cache.addFile(file);
-         }
-      }
-      catch (IOException e)
-      {
-         e.printStackTrace(); // TODO : manage
+         write(indexedFile, mapping.toString(file));
+         cache.addFile(file);
       }
    }
 
    public void updateDirIndex(GDSDir dir)
    {
       File indexedFile = new File(indexDirDirectory, dir.getDocId());
-      try
+      GDSDir gdsDir = cache.getFolder(dir.getDocId());
+      String eTag = (gdsDir == null ? "" : gdsDir.getEtag());
+      if (!eTag.equals(dir.getEtag()))
       {
-         GDSDir gdsDir = cache.getFolder(dir.getDocId());
-         String eTag = (gdsDir == null ? "" : gdsDir.getEtag());
-         if (!eTag.equals(dir.getEtag()))
-         {
-            FileWriter fw = new FileWriter(indexedFile, false);
-            fw.append(mapping.toString(dir));
-            fw.flush();
-            cache.addFolder(dir);
-         }
-
+         write(indexedFile, mapping.toString(dir));
+         cache.addFolder(dir);
       }
-      catch (IOException e)
+   }
+
+   public void resetPathDirIndex()
+   {
+      for (String dirName : cache.getDirectoriesName())
       {
-         e.printStackTrace(); // TODO : manage
+         GDSDir dir = cache.getFolder(dirName);
+         GDSPath path = new GDSPath();
+         path.setDocId(dir.getDocId());
+         path.setPaths(getPathDir(dir));
+
+         File indexedPath = new File(indexPathDirectory, path.getDocId());
+         write(indexedPath, mapping.toString(path));
+
+         cache.addPath(path);
+      }
+   }
+
+   public void resetPathFileIndex()
+   {
+      for (String fileName : cache.getFilesName())
+      {
+         GDSFile file = cache.getFile(fileName);
+         GDSPath path = new GDSPath();
+         path.setDocId(file.getDocId());
+         List<String> paths = new ArrayList<String>();
+         if (file.getParents().size() == 0)
+         {
+            paths.add(file.getTitle());
+         }
+         else
+         {
+            for (String parentId : file.getParents())
+            {
+               for (String parentPath : cache.getPath(parentId).getPaths())
+               {
+                  paths.add(parentPath + "/" + file.getTitle());
+               }
+            }
+         }
+         path.setPaths(paths);
+
+         File indexedPath = new File(indexPathDirectory, path.getDocId());
+         write(indexedPath, mapping.toString(path));
+
+         cache.addPath(path);
       }
    }
 
@@ -126,6 +163,7 @@ public abstract class GDSFSManager
       File indexedFile = new File(indexFileDirectory, id);
       indexedFile.delete();
       cache.removeFile(id);
+      cache.removePath(id);
    }
 
    public void deleteDirIndex(String id)
@@ -133,6 +171,7 @@ public abstract class GDSFSManager
       File indexedDir = new File(indexDirDirectory, id);
       indexedDir.delete();
       cache.removeFolder(id);
+      cache.removePath(id);
    }
 
    public Set<String> getFilesName()
@@ -143,6 +182,40 @@ public abstract class GDSFSManager
    public Set<String> getDirectoriesName()
    {
       return cache.getDirectoriesName();
+   }
+
+   public void write(File file, String content)
+   {
+      try
+      {
+         FileWriter fw = new FileWriter(file, false);
+         fw.append(content);
+         fw.flush();
+      }
+      catch (IOException e)
+      {
+         e.printStackTrace(); // TODO : manage
+      }
+   }
+
+   public List<String> getPathDir(GDSDir dir)
+   {
+      List<String> paths = new ArrayList<String>();
+      if (dir.getParents().size() == 0)
+      {
+         paths.add(dir.getTitle());
+      }
+      else
+      {
+         for (String parentId : dir.getParents())
+         {
+            for (String parentPath : getPathDir(cache.getFolder(parentId)))
+            {
+               paths.add(parentPath + "/" + dir.getTitle());
+            }
+         }
+      }
+      return paths;
    }
 
    abstract protected File getSysDirectory();

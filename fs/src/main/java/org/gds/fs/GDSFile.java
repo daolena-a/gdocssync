@@ -21,6 +21,9 @@ package org.gds.fs;
 
 import org.gds.fs.mapping.annotations.Flat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
@@ -35,8 +38,12 @@ public class GDSFile
    @Flat
    private String title;
 
+   @Flat
+   private List<String> parents;
+
    public GDSFile()
    {
+      parents = new ArrayList<String>();
    }
 
    public String getDocId()
@@ -71,6 +78,16 @@ public class GDSFile
    public void setTitle(final String title)
    {
       this.title = title;
+   }
+
+   public List<String> getParents()
+   {
+      return parents;
+   }
+
+   public void setParents(List<String> parents)
+   {
+      this.parents = parents;
    }
 
    @Override

@@ -58,6 +58,7 @@ public class RemoteMonitoringService extends Thread
          Set<String> foldersName = new HashSet<String>();
          Set<String> filesName = new HashSet<String>();
 
+         // Doc
          for (DocumentListEntry documentListEntry : googleDocClient.getFolders()
                  .getEntries())
          {
@@ -72,6 +73,8 @@ public class RemoteMonitoringService extends Thread
                  Event.UPDATE_DIRECTORY
             );
          }
+
+         // Files
          for (DocumentListEntry documentListEntry : googleDocClient.getFiles().getEntries())
          {
             filesName.add(documentListEntry.getDocId());

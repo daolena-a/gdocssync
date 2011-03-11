@@ -16,7 +16,6 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-
 package org.gds.fs;
 
 import org.gds.fs.mapping.annotations.Flat;
@@ -28,22 +27,16 @@ import java.util.List;
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class GDSDir
+public class GDSPath
 {
    private String docId;
 
    @Flat
-   private String etag;
+   private List<String> paths;
 
-   @Flat
-   private String title;
-
-   @Flat
-   private List<String> parents;
-
-   public GDSDir()
+   public GDSPath()
    {
-      parents = new ArrayList<String>();
+      paths = new ArrayList<String>();
    }
 
    public String getDocId()
@@ -51,7 +44,7 @@ public class GDSDir
       return docId;
    }
 
-   public void setDocId(final String docId)
+   public void setDocId(String docId)
    {
       if (docId == null)
       {
@@ -60,38 +53,18 @@ public class GDSDir
       this.docId = docId;
    }
 
-   public String getEtag()
+   public List<String> getPaths()
    {
-      return etag;
+      return paths;
    }
 
-   public void setEtag(final String etag)
+   public void setPaths(List<String> paths)
    {
-      this.etag = etag;
-   }
-
-   public String getTitle()
-   {
-      return title;
-   }
-
-   public void setTitle(final String title)
-   {
-      this.title = title;
-   }
-
-   public List<String> getParents()
-   {
-      return parents;
-   }
-
-   public void setParents(final List<String> parent)
-   {
-      this.parents = parent;
+      this.paths = paths;
    }
 
    @Override
-   public boolean equals(final Object o)
+   public boolean equals(Object o)
    {
       if (this == o)
       {
@@ -102,9 +75,9 @@ public class GDSDir
          return false;
       }
 
-      GDSDir gdsDir = (GDSDir) o;
+      GDSPath gdsPath = (GDSPath) o;
 
-      if (docId != null ? !docId.equals(gdsDir.docId) : gdsDir.docId != null)
+      if (docId != null ? !docId.equals(gdsPath.docId) : gdsPath.docId != null)
       {
          return false;
       }

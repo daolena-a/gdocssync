@@ -37,6 +37,7 @@ public class IndexCache
 {
    private Map<String, GDSFile> files = new HashMap<String, GDSFile>();
    private Map<String, GDSDir> folders = new HashMap<String, GDSDir>();
+   private Map<String, GDSPath> paths = new HashMap<String, GDSPath>();
    private boolean initialized = false;
 
    public void addFile(GDSFile file)
@@ -49,6 +50,11 @@ public class IndexCache
       folders.put(folder.getDocId(), folder);
    }
 
+   public void addPath(GDSPath path)
+   {
+      paths.put(path.getDocId(), path);
+   }
+
    public GDSFile getFile(String id)
    {
       return files.get(id);
@@ -57,6 +63,11 @@ public class IndexCache
    public GDSDir getFolder(String id)
    {
       return folders.get(id);
+   }
+
+   public GDSPath getPath(String id)
+   {
+      return paths.get(id);
    }
 
    public void init(File sysDir, FlatMapping mapping)
@@ -83,6 +94,16 @@ public class IndexCache
          f.setDocId(folder.getName());
          folders.put(folder.getName(), f);
       }
+
+      //
+      File indexPaths = new File(sysDir, "paths");
+      for (File path : indexPaths.listFiles())
+      {
+         GDSPath p = mapping.toObject(readFile(path), GDSPath.class);
+         p.setDocId(path.getName());
+         paths.put(path.getName(), p);
+      }
+      
       initialized = true;
    }
 
@@ -113,6 +134,11 @@ public class IndexCache
    public void removeFolder(String id)
    {
       folders.remove(id);
+   }
+
+   public void removePath(String id)
+   {
+      paths.remove(id);
    }
 
    public Set<String> getFilesName()
