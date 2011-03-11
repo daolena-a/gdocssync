@@ -23,6 +23,7 @@ import net.contentobjects.jnotify.JNotify;
 import org.gds.fs.GDSFSManager;
 import org.gds.fs.unix.GDSFSUnixManager;
 import org.gds.gui.GDSTray;
+import org.gds.monitoring.index.IndexListener;
 import org.gds.monitoring.local.LocalListener;
 import org.gds.monitoring.remote.GoogleDocClient;
 import org.gds.monitoring.remote.RemoteListener;
@@ -70,6 +71,8 @@ public class GDS
       try
       {
          JNotify.addWatch(monitoredFile.getAbsolutePath(), LocalListener.mask, true, new LocalListener());
+         JNotify.addWatch(fsManager.getSysDirectory().getAbsolutePath(), LocalListener.mask, true, new IndexListener());
+
       }
       catch (Throwable e)
       {

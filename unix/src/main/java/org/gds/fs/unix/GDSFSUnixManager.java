@@ -35,8 +35,9 @@ public class GDSFSUnixManager extends GDSFSManager
    }
 
    @Override
-   protected File getSysDirectory()
+   public File getSysDirectory()
    {
       return new File(monitoredFile, ".gds");
    }
+
 }

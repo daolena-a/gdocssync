@@ -38,6 +38,9 @@ public abstract class GDSFSManager
    private FlatMapping mapping;
    private IndexCache cache;
 
+
+
+
    protected GDSFSManager(final File monitoredFile)
    {
       if (monitoredFile == null)
@@ -48,7 +51,9 @@ public abstract class GDSFSManager
       this.mapping = new FlatMapping();
       this.cache = new IndexCache();
    }
-
+    public String getMonitoredFilePath(){
+        return monitoredFile.getAbsolutePath();
+    }
    public void init()
    {
       //
@@ -117,6 +122,9 @@ public abstract class GDSFSManager
          e.printStackTrace(); // TODO : manage
       }
    }
+    public IndexCache getCache(){
+        return cache;
+    }
 
-   abstract protected File getSysDirectory();
+   abstract public File getSysDirectory();
 }
