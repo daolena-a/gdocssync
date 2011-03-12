@@ -22,6 +22,7 @@ package org.gds.monitoring.remote;
 import com.google.gdata.data.Link;
 import com.google.gdata.data.docs.DocumentListEntry;
 
+import javax.management.monitor.Monitor;
 import java.util.*;
 
 /**
@@ -32,11 +33,13 @@ public class RemoteMonitoringService extends Thread
 {
    private GoogleDocClient googleDocClient;
    private int delay;
-   private List<ServerListener> listeners = new LinkedList<ServerListener>();
+   private List<ServerListener> listeners;
+   private MonitorContext context;
 
    public RemoteMonitoringService(final GoogleDocClient googleDocClient)
    {
       this(googleDocClient, 10);
+      listeners = new LinkedList<ServerListener>();
    }
 
    public RemoteMonitoringService(final GoogleDocClient googleDocClient, final int delay)
@@ -55,35 +58,37 @@ public class RemoteMonitoringService extends Thread
    {
       while(true)
       {
-         Set<String> foldersName = new HashSet<String>();
-         Set<String> filesName = new HashSet<String>();
+         // TODO : first check the DateTime
+         context = new MonitorContext();
 
          // Doc
+         // TODO : get new folders only
          for (DocumentListEntry documentListEntry : googleDocClient.getFolders()
                  .getEntries())
          {
-            foldersName.add(documentListEntry.getDocId());
+            context.add(documentListEntry.getDocId(), MonitorContext.DocType.FOLDER);
             fireEvent(new ServerEvent(
                  documentListEntry.getDocId(),
                  documentListEntry.getEtag(),
                  documentListEntry.getTitle().getPlainText(),
                  parentId(documentListEntry.getParentLinks()),
-                 null
+                 context
             ),
                  Event.UPDATE_DIRECTORY
             );
          }
 
          // Files
+         // TODO : get new files only
          for (DocumentListEntry documentListEntry : googleDocClient.getFiles().getEntries())
          {
-            filesName.add(documentListEntry.getDocId());
+            context.add(documentListEntry.getDocId(), MonitorContext.DocType.FILE);
             fireEvent(new ServerEvent(
                  documentListEntry.getDocId(),
                  documentListEntry.getEtag(),
                  documentListEntry.getTitle().getPlainText(),
                  parentId(documentListEntry.getParentLinks()),
-                 null
+                 context
             ),
                  Event.UPDATE_FILE
             );
@@ -95,7 +100,7 @@ public class RemoteMonitoringService extends Thread
                null,
                null,
                null,
-               foldersName
+               context
          ),
                Event.END_UPDATE_DIRECTORY
          );
@@ -106,7 +111,7 @@ public class RemoteMonitoringService extends Thread
                null,
                null,
                null,
-               filesName
+               context
             ),
                   Event.END_UPDATE_FILE
          );

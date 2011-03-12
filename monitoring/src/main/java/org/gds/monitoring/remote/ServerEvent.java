@@ -32,15 +32,15 @@ public class ServerEvent
    private String etag;
    private String title;
    private List<String> parents;
-   private Set<String> allIds;
+   private MonitorContext context;
 
-   public ServerEvent(String fileId, String etag, String title, List<String> parents, Set<String> allIds)
+   public ServerEvent(final String fileId, final String etag, final String title, final List<String> parents, final MonitorContext context)
    {
       this.fileId = fileId;
       this.etag = etag;
       this.title = title;
       this.parents = parents;
-      this.allIds = allIds;
+      this.context = context;
    }
 
    public String getFileId()
@@ -63,8 +63,8 @@ public class ServerEvent
       return parents;
    }
 
-   public Set<String> getAllIds()
+   public MonitorContext getContext()
    {
-      return allIds;
+      return context;
    }
 }

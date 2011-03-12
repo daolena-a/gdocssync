@@ -23,6 +23,7 @@ import org.gds.fs.GDSDir;
 import org.gds.fs.GDSFSManager;
 import org.gds.fs.GDSFile;
 
+import javax.management.monitor.Monitor;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,15 +52,21 @@ public class RemoteListener implements ServerListener
       gdsFile.setEtag(se.getEtag());
       gdsFile.setTitle(se.getTitle());
       gdsFile.setParents(se.getParents());
-      fsManager.updateFileIndex(gdsFile);
+      if (fsManager.updateFileIndex(gdsFile))
+      {
+         se.getContext().setUpdated(gdsFile.getDocId(), MonitorContext.DocType.FILE);
+      }
    }
 
    public void onFileEndUpdate(final ServerEvent se)
    {
-      fsManager.resetPathFileIndex();
+      for (String fileName : se.getContext().getUpdatedFiles())
+      {
+         fsManager.updatePathFileIndex(fileName);
+      }
       
       Set<String> deletedFiles = new HashSet(fsManager.getFilesName());
-      deletedFiles.removeAll(se.getAllIds());
+      deletedFiles.removeAll(se.getContext().getAllFiles());
       for (String id : deletedFiles)
       {
          fsManager.deleteFileIndex(id);
@@ -73,15 +80,21 @@ public class RemoteListener implements ServerListener
       gdsDir.setEtag(se.getEtag());
       gdsDir.setTitle(se.getTitle());
       gdsDir.setParents(se.getParents());
-      fsManager.updateDirIndex(gdsDir);
+      if (fsManager.updateDirIndex(gdsDir))
+      {
+        se.getContext().setUpdated(gdsDir.getDocId(), MonitorContext.DocType.FOLDER);
+      }
    }
 
    public void onDirectoryEndUpdate(final ServerEvent se)
    {
-      fsManager.resetPathDirIndex();
+      for (String dirName : se.getContext().getUpdatedFolders())
+      {
+         fsManager.updatePathDirIndex(dirName);
+      }
 
       Set<String> deletedDirs = new HashSet(fsManager.getDirectoriesName());
-      deletedDirs.removeAll(se.getAllIds());
+      deletedDirs.removeAll(se.getContext().getAllFolders());
       for (String id : deletedDirs)
       {
          fsManager.deleteDirIndex(id);

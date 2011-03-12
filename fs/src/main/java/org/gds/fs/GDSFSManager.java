@@ -87,7 +87,12 @@ public abstract class GDSFSManager
       cache.init(getSysDirectory(), mapping);
    }
 
-   public void updateFileIndex(GDSFile file)
+   /**
+    *
+    * @param file
+    * @return updated
+    */
+   public boolean updateFileIndex(GDSFile file)
    {
       File indexedFile = new File(indexFileDirectory, file.getDocId());
       GDSFile gdsFile  = cache.getFile(file.getDocId());
@@ -96,10 +101,17 @@ public abstract class GDSFSManager
       {
          write(indexedFile, mapping.toString(file));
          cache.addFile(file);
+         return true;
       }
+      return false;
    }
 
-   public void updateDirIndex(GDSDir dir)
+   /**
+    *
+    * @param dir
+    * @return updated
+    */
+   public boolean updateDirIndex(GDSDir dir)
    {
       File indexedFile = new File(indexDirDirectory, dir.getDocId());
       GDSDir gdsDir = cache.getFolder(dir.getDocId());
@@ -108,54 +120,50 @@ public abstract class GDSFSManager
       {
          write(indexedFile, mapping.toString(dir));
          cache.addFolder(dir);
+         return true;
       }
+      return false;
    }
 
-   public void resetPathDirIndex()
+   public void updatePathDirIndex(String dirName)
    {
-      for (String dirName : cache.getDirectoriesName())
-      {
-         GDSDir dir = cache.getFolder(dirName);
-         GDSPath path = new GDSPath();
-         path.setDocId(dir.getDocId());
-         path.setPaths(getPathDir(dir));
+      GDSDir dir = cache.getFolder(dirName);
+      GDSPath path = new GDSPath();
+      path.setDocId(dir.getDocId());
+      path.setPaths(getPathDir(dir));
 
-         File indexedPath = new File(indexPathDirectory, path.getDocId());
-         write(indexedPath, mapping.toString(path));
+      File indexedPath = new File(indexPathDirectory, path.getDocId());
+      write(indexedPath, mapping.toString(path));
 
-         cache.addPath(path);
-      }
+      cache.addPath(path);
    }
 
-   public void resetPathFileIndex()
+   public void updatePathFileIndex(String fileName)
    {
-      for (String fileName : cache.getFilesName())
+      GDSFile file = cache.getFile(fileName);
+      GDSPath path = new GDSPath();
+      path.setDocId(file.getDocId());
+      List<String> paths = new ArrayList<String>();
+      if (file.getParents().size() == 0)
       {
-         GDSFile file = cache.getFile(fileName);
-         GDSPath path = new GDSPath();
-         path.setDocId(file.getDocId());
-         List<String> paths = new ArrayList<String>();
-         if (file.getParents().size() == 0)
+         paths.add(file.getTitle());
+      }
+      else
+      {
+         for (String parentId : file.getParents())
          {
-            paths.add(file.getTitle());
-         }
-         else
-         {
-            for (String parentId : file.getParents())
+            for (String parentPath : cache.getPath(parentId).getPaths())
             {
-               for (String parentPath : cache.getPath(parentId).getPaths())
-               {
-                  paths.add(parentPath + "/" + file.getTitle());
-               }
+               paths.add(parentPath + "/" + file.getTitle());
             }
          }
-         path.setPaths(paths);
-
-         File indexedPath = new File(indexPathDirectory, path.getDocId());
-         write(indexedPath, mapping.toString(path));
-
-         cache.addPath(path);
       }
+      path.setPaths(paths);
+
+      File indexedPath = new File(indexPathDirectory, path.getDocId());
+      write(indexedPath, mapping.toString(path));
+
+      cache.addPath(path);
    }
 
    public void deleteFileIndex(String id)
