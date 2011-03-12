@@ -33,7 +33,7 @@ import java.util.Set;
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class IndexCache
+public class Index
 {
    private Map<String, GDSFile> files = new HashMap<String, GDSFile>();
    private Map<String, GDSDir> folders = new HashMap<String, GDSDir>();
