@@ -1,10 +1,10 @@
 package org.gds.monitoring.index;
 
 import net.contentobjects.jnotify.JNotifyListener;
-import org.gds.fs.GDSDir;
 import org.gds.fs.GDSFSManager;
-import org.gds.fs.IndexCache;
+import org.gds.fs.Index;
 import org.gds.fs.mapping.FlatMapping;
+import org.gds.fs.object.GDSDir;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -19,11 +19,11 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class IndexListener implements JNotifyListener {
-    private IndexCache cache;
+    private Index cache;
     private GDSFSManager fileSystemManager;
 
     public IndexListener (){
-        cache = new IndexCache();
+        cache = new Index();
     }
     public IndexListener (GDSFSManager manager){
         this();
@@ -34,7 +34,7 @@ public class IndexListener implements JNotifyListener {
         if (s1.startsWith("folders")){
             FlatMapping mapping = new FlatMapping();
             GDSDir dir = mapping.toObject(s+s1 , GDSDir.class);
-            File dir2create  = new File(fileSystemManager.getMonitoredFilePath()+"/"+dir.getDocId());
+            File dir2create  =null ;// new File(fileSystemManager.getMonitoredFilePath()+"/"+dir.getDocId());
             System.out.println(dir.getDocId());
             dir2create.mkdir();
             //cache.getFolder(s1);
