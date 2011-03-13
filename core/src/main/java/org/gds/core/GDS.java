@@ -25,7 +25,7 @@ import org.gds.fs.unix.GDSFSUnixManager;
 import org.gds.gui.GDSTray;
 import org.gds.monitoring.local.LocalListener;
 import org.gds.monitoring.remote.GoogleDocClient;
-import org.gds.monitoring.remote.RemoteListener;
+import org.gds.monitoring.remote.listener.RemoteListener;
 import org.gds.monitoring.remote.RemoteMonitoringService;
 
 import java.io.File;

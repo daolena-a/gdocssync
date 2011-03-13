@@ -17,18 +17,60 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.remote;
+package org.gds.fs.object;
 
+import org.gds.fs.mapping.annotations.Flat;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public interface ServerListener
+public class GDSDir extends GDSObject
 {
-   void onFileSync(ServerEvent se);
-   void onFileEndUpdate(ServerEvent se);
-   void onDirectorySync(ServerEvent se);
-   void onDirectoryEndUpdate(ServerEvent se);
+   @Flat
+   private String etag;
+
+   @Flat
+   private String title;
+
+   @Flat
+   private List<String> parents;
+
+   public GDSDir()
+   {
+      parents = new ArrayList<String>();
+   }
+
+   public String getEtag()
+   {
+      return etag;
+   }
+
+   public void setEtag(final String etag)
+   {
+      this.etag = etag;
+   }
+
+   public String getTitle()
+   {
+      return title;
+   }
+
+   public void setTitle(final String title)
+   {
+      this.title = title;
+   }
+
+   public List<String> getParents()
+   {
+      return parents;
+   }
+
+   public void setParents(final List<String> parent)
+   {
+      this.parents = parent;
+   }
 }

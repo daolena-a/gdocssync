@@ -17,34 +17,15 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.fs;
-
-import org.gds.fs.mapping.annotations.Flat;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.gds.fs.object;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class GDSFile
+public class GDSObject
 {
    private String docId;
-   
-   @Flat
-   private String etag;
-
-   @Flat
-   private String title;
-
-   @Flat
-   private List<String> parents;
-
-   public GDSFile()
-   {
-      parents = new ArrayList<String>();
-   }
 
    public String getDocId()
    {
@@ -60,36 +41,6 @@ public class GDSFile
       this.docId = docId;
    }
 
-   public String getEtag()
-   {
-      return etag;
-   }
-
-   public void setEtag(final String etag)
-   {
-      this.etag = etag;
-   }
-
-   public String getTitle()
-   {
-      return title;
-   }
-
-   public void setTitle(final String title)
-   {
-      this.title = title;
-   }
-
-   public List<String> getParents()
-   {
-      return parents;
-   }
-
-   public void setParents(List<String> parents)
-   {
-      this.parents = parents;
-   }
-
    @Override
    public boolean equals(final Object o)
    {
@@ -102,9 +53,9 @@ public class GDSFile
          return false;
       }
 
-      GDSFile gdsFile = (GDSFile) o;
+      GDSObject gdsObject = (GDSObject) o;
 
-      if (docId != null ? !docId.equals(gdsFile.docId) : gdsFile.docId != null)
+      if (docId != null ? !docId.equals(gdsObject.docId) : gdsObject.docId != null)
       {
          return false;
       }

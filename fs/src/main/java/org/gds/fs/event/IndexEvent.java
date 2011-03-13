@@ -17,54 +17,33 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.remote;
+package org.gds.fs.event;
 
-import java.util.List;
-import java.util.Set;
+import org.gds.fs.Index;
+import org.gds.fs.object.GDSObject;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class ServerEvent
+public class IndexEvent
 {
-   private String fileId;
-   private String etag;
-   private String title;
-   private List<String> parents;
-   private MonitorContext context;
+   private GDSObject gdsObject;
+   private Index index;
 
-   public ServerEvent(final String fileId, final String etag, final String title, final List<String> parents, final MonitorContext context)
+   public IndexEvent(final GDSObject gdsObject, final Index index)
    {
-      this.fileId = fileId;
-      this.etag = etag;
-      this.title = title;
-      this.parents = parents;
-      this.context = context;
+      this.gdsObject = gdsObject;
+      this.index = index;
    }
 
-   public String getFileId()
+   public GDSObject getGdsObject()
    {
-      return fileId;
+      return gdsObject;
    }
 
-   public String getEtag()
+   public Index getIndex()
    {
-      return etag;
-   }
-
-   public String getTitle()
-   {
-      return title;
-   }
-
-   public List<String> getParents()
-   {
-      return parents;
-   }
-
-   public MonitorContext getContext()
-   {
-      return context;
+      return index;
    }
 }

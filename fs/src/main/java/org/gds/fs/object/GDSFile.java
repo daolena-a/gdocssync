@@ -16,7 +16,8 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.gds.fs;
+
+package org.gds.fs.object;
 
 import org.gds.fs.mapping.annotations.Flat;
 
@@ -27,67 +28,48 @@ import java.util.List;
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class GDSPath
+public class GDSFile extends GDSObject
 {
-   private String docId;
+   @Flat
+   private String etag;
 
    @Flat
-   private List<String> paths;
+   private String title;
 
-   public GDSPath()
+   @Flat
+   private List<String> parents;
+
+   public GDSFile()
    {
-      paths = new ArrayList<String>();
+      parents = new ArrayList<String>();
+   }
+   public String getEtag()
+   {
+      return etag;
    }
 
-   public String getDocId()
+   public void setEtag(final String etag)
    {
-      return docId;
+      this.etag = etag;
    }
 
-   public void setDocId(String docId)
+   public String getTitle()
    {
-      if (docId == null)
-      {
-         throw new IllegalArgumentException("docId is null");
-      }
-      this.docId = docId;
+      return title;
    }
 
-   public List<String> getPaths()
+   public void setTitle(final String title)
    {
-      return paths;
+      this.title = title;
    }
 
-   public void setPaths(List<String> paths)
+   public List<String> getParents()
    {
-      this.paths = paths;
+      return parents;
    }
 
-   @Override
-   public boolean equals(Object o)
+   public void setParents(List<String> parents)
    {
-      if (this == o)
-      {
-         return true;
-      }
-      if (o == null || getClass() != o.getClass())
-      {
-         return false;
-      }
-
-      GDSPath gdsPath = (GDSPath) o;
-
-      if (docId != null ? !docId.equals(gdsPath.docId) : gdsPath.docId != null)
-      {
-         return false;
-      }
-
-      return true;
-   }
-
-   @Override
-   public int hashCode()
-   {
-      return docId != null ? docId.hashCode() : 0;
+      this.parents = parents;
    }
 }

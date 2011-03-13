@@ -17,15 +17,16 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.remote;
+package org.gds.monitoring.remote.listener;
 
-import org.gds.fs.GDSDir;
+import org.gds.fs.object.GDSDir;
 import org.gds.fs.GDSFSManager;
-import org.gds.fs.GDSFile;
+import org.gds.fs.object.GDSFile;
+import org.gds.monitoring.remote.MonitorContext;
+import org.gds.monitoring.remote.event.ServerEvent;
+import org.gds.monitoring.remote.event.ServerListener;
 
-import javax.management.monitor.Monitor;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

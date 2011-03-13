@@ -19,7 +19,12 @@
 
 package org.gds.fs;
 
+import org.gds.fs.listener.FSIndexListener;
 import org.gds.fs.mapping.FlatMapping;
+import org.gds.fs.object.GDSDir;
+import org.gds.fs.object.GDSFile;
+import org.gds.fs.object.GDSObjectType;
+import org.gds.fs.object.GDSPath;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -51,6 +56,7 @@ public abstract class GDSFSManager
       this.monitoredFile = monitoredFile;
       this.mapping = new FlatMapping();
       this.index = new Index();
+      index.addListener(new FSIndexListener(this));
    }
 
    public void init()
@@ -63,21 +69,21 @@ public abstract class GDSFSManager
       }
 
       //
-      indexFileDirectory = new File(getSysDirectory(), "files");
+      indexFileDirectory = new File(sysDirectory, "files");
       if (!indexFileDirectory.exists())
       {
          indexFileDirectory.mkdir();
       }
 
       //
-      indexDirDirectory = new File(getSysDirectory(), "folders");
+      indexDirDirectory = new File(sysDirectory, "folders");
       if (!indexDirDirectory.exists())
       {
          indexDirDirectory.mkdir();
       }
 
       //
-      indexPathDirectory = new File(getSysDirectory(), "paths");
+      indexPathDirectory = new File(sysDirectory, "paths");
       if (!indexPathDirectory.exists())
       {
          indexPathDirectory.mkdir();
@@ -129,6 +135,7 @@ public abstract class GDSFSManager
    {
       GDSDir dir = index.getFolder(dirName);
       GDSPath path = new GDSPath();
+      path.setType(GDSObjectType.FOLDER);
       path.setDocId(dir.getDocId());
       path.setPaths(getPathDir(dir));
 
@@ -142,6 +149,7 @@ public abstract class GDSFSManager
    {
       GDSFile file = index.getFile(fileName);
       GDSPath path = new GDSPath();
+      path.setType(GDSObjectType.FILE);
       path.setDocId(file.getDocId());
       List<String> paths = new ArrayList<String>();
       if (file.getParents().size() == 0)
@@ -154,7 +162,7 @@ public abstract class GDSFSManager
          {
             for (String parentPath : index.getPath(parentId).getPaths())
             {
-               paths.add(parentPath + "/" + file.getTitle());
+               paths.add(parentPath + File.separator + file.getTitle());
             }
          }
       }
@@ -169,7 +177,9 @@ public abstract class GDSFSManager
    public void deleteFileIndex(String id)
    {
       File indexedFile = new File(indexFileDirectory, id);
+      File indexedPath = new File(indexPathDirectory, id);
       indexedFile.delete();
+      indexedPath.delete();
       index.removeFile(id);
       index.removePath(id);
    }
@@ -177,9 +187,16 @@ public abstract class GDSFSManager
    public void deleteDirIndex(String id)
    {
       File indexedDir = new File(indexDirDirectory, id);
+      File indexedPath = new File(indexPathDirectory, id);
       indexedDir.delete();
+      indexedPath.delete();
       index.removeFolder(id);
       index.removePath(id);
+   }
+
+   public void writeDataFolder(String path)
+   {
+      new File(monitoredFile, path).mkdirs();
    }
 
    public Set<String> getFilesName()

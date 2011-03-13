@@ -17,47 +17,37 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.fs;
+package org.gds.monitoring.remote.event;
 
-import org.gds.fs.mapping.annotations.Flat;
+import org.gds.monitoring.remote.MonitorContext;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class GDSDir
+public class ServerEvent
 {
-   private String docId;
-
-   @Flat
+   private String fileId;
    private String etag;
-
-   @Flat
    private String title;
-
-   @Flat
    private List<String> parents;
+   private MonitorContext context;
 
-   public GDSDir()
+   public ServerEvent(final String fileId, final String etag, final String title, final List<String> parents, final MonitorContext context)
    {
-      parents = new ArrayList<String>();
+      this.fileId = fileId;
+      this.etag = etag;
+      this.title = title;
+      this.parents = parents;
+      this.context = context;
    }
 
-   public String getDocId()
+   public String getFileId()
    {
-      return docId;
-   }
-
-   public void setDocId(final String docId)
-   {
-      if (docId == null)
-      {
-         throw new IllegalArgumentException("docId is null");
-      }
-      this.docId = docId;
+      return fileId;
    }
 
    public String getEtag()
@@ -65,19 +55,9 @@ public class GDSDir
       return etag;
    }
 
-   public void setEtag(final String etag)
-   {
-      this.etag = etag;
-   }
-
    public String getTitle()
    {
       return title;
-   }
-
-   public void setTitle(final String title)
-   {
-      this.title = title;
    }
 
    public List<String> getParents()
@@ -85,36 +65,8 @@ public class GDSDir
       return parents;
    }
 
-   public void setParents(final List<String> parent)
+   public MonitorContext getContext()
    {
-      this.parents = parent;
-   }
-
-   @Override
-   public boolean equals(final Object o)
-   {
-      if (this == o)
-      {
-         return true;
-      }
-      if (o == null || getClass() != o.getClass())
-      {
-         return false;
-      }
-
-      GDSDir gdsDir = (GDSDir) o;
-
-      if (docId != null ? !docId.equals(gdsDir.docId) : gdsDir.docId != null)
-      {
-         return false;
-      }
-
-      return true;
-   }
-
-   @Override
-   public int hashCode()
-   {
-      return docId != null ? docId.hashCode() : 0;
+      return context;
    }
 }

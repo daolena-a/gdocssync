@@ -19,12 +19,19 @@
 
 package org.gds.fs;
 
+import org.gds.fs.event.IndexEvent;
+import org.gds.fs.event.IndexListener;
 import org.gds.fs.mapping.FlatMapping;
+import org.gds.fs.object.GDSDir;
+import org.gds.fs.object.GDSFile;
+import org.gds.fs.object.GDSPath;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -35,24 +42,55 @@ import java.util.Set;
  */
 public class Index
 {
-   private Map<String, GDSFile> files = new HashMap<String, GDSFile>();
-   private Map<String, GDSDir> folders = new HashMap<String, GDSDir>();
-   private Map<String, GDSPath> paths = new HashMap<String, GDSPath>();
-   private boolean initialized = false;
+   private Map<String, GDSFile> files;
+   private Map<String, GDSDir> folders;
+   private Map<String, GDSPath> paths;
+   private boolean initialized;
+   private List<IndexListener> listeners;
+
+   public Index()
+   {
+      files = new HashMap<String, GDSFile>();
+      folders = new HashMap<String, GDSDir>();
+      paths = new HashMap<String, GDSPath>();
+      initialized = false;
+      listeners = new ArrayList<IndexListener>();
+   }
 
    public void addFile(GDSFile file)
    {
+      boolean isNew = !files.containsKey(file.getDocId());
+      
       files.put(file.getDocId(), file);
+
+      fireEvent(
+         new IndexEvent(file, this),
+         (isNew ? EventType.ON_CREATE_FILE : EventType.ON_UPDATE_FILE)
+      );
    }
 
    public void addFolder(GDSDir folder)
    {
+      boolean isNew = !folders.containsKey(folder.getDocId());
+
       folders.put(folder.getDocId(), folder);
+
+      fireEvent(
+              new IndexEvent(folder, this),
+              (isNew ? EventType.ON_CREATE_FOLDER : EventType.ON_UPDATE_FOLDER)
+      );
    }
 
    public void addPath(GDSPath path)
    {
+      boolean isNew = !paths.containsKey(path.getDocId()) ;
+
       paths.put(path.getDocId(), path);
+
+      fireEvent(
+              new IndexEvent(path, this),
+              (isNew ? EventType.ON_CREATE_PATH : EventType.ON_UPDATE_PATH)
+      );
    }
 
    public GDSFile getFile(String id)
@@ -121,24 +159,33 @@ public class Index
       }
       catch (FileNotFoundException e)
       {
-         e.printStackTrace();
+         e.printStackTrace(); // TODO : manage
          return null;
       }
    }
 
    public void removeFile(String id)
    {
-      files.remove(id);
+      fireEvent(
+         new IndexEvent(files.remove(id), this),
+         EventType.ON_DELETE_FILE
+      );
    }
 
    public void removeFolder(String id)
    {
-      folders.remove(id);
+      fireEvent(
+              new IndexEvent(folders.remove(id), this),
+              EventType.ON_DELETE_FOLDER
+      );
    }
 
    public void removePath(String id)
    {
-      paths.remove(id);
+      fireEvent(
+              new IndexEvent(paths.remove(id), this),
+              EventType.ON_DELETE_PATH
+      );
    }
 
    public Set<String> getFilesName()
@@ -149,5 +196,60 @@ public class Index
    public Set<String> getDirectoriesName()
    {
       return folders.keySet();
+   }
+
+   public void addListener(IndexListener el)
+   {
+      listeners.add(el);
+   }
+
+   private void fireEvent(IndexEvent ie, EventType type)
+   {
+      for (IndexListener listener : listeners)
+      {
+         switch(type)
+         {
+            case ON_CREATE_FILE:
+               listener.onCreateFile(ie);
+               break;
+            case ON_CREATE_FOLDER:
+               listener.onCreateFolder(ie);
+               break;
+            case ON_CREATE_PATH:
+               listener.onCreatePath(ie);
+               break;
+            case ON_UPDATE_FILE:
+               listener.onUpdateFile(ie);
+               break;
+            case ON_UPDATE_FOLDER:
+               listener.onUpdateFolder(ie);
+               break;
+            case ON_UPDATE_PATH:
+               listener.onUpdatePath(ie);
+               break;
+            case ON_DELETE_FILE:
+               listener.onDeleteFile(ie);
+               break;
+            case ON_DELETE_FOLDER:
+               listener.onDeleteFolder(ie);
+               break;
+            case ON_DELETE_PATH:
+               listener.onDeletePath(ie);
+               break;
+         }
+      }
+   }
+
+   enum EventType
+   {
+      ON_CREATE_FILE,
+      ON_CREATE_FOLDER,
+      ON_CREATE_PATH,
+      ON_UPDATE_FILE,
+      ON_UPDATE_FOLDER,
+      ON_UPDATE_PATH,
+      ON_DELETE_FILE,
+      ON_DELETE_FOLDER,
+      ON_DELETE_PATH
    }
 }

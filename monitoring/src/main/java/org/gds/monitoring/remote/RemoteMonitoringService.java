@@ -21,8 +21,9 @@ package org.gds.monitoring.remote;
 
 import com.google.gdata.data.Link;
 import com.google.gdata.data.docs.DocumentListEntry;
+import org.gds.monitoring.remote.event.ServerEvent;
+import org.gds.monitoring.remote.event.ServerListener;
 
-import javax.management.monitor.Monitor;
 import java.util.*;
 
 /**
