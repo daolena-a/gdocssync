@@ -17,11 +17,17 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.remote;
+package org.gds.monitoring.remote.listener;
 
-import org.gds.fs.GDSDir;
+import org.gds.fs.object.GDSDir;
 import org.gds.fs.GDSFSManager;
-import org.gds.fs.GDSFile;
+import org.gds.fs.object.GDSFile;
+import org.gds.monitoring.remote.MonitorContext;
+import org.gds.monitoring.remote.event.ServerEvent;
+import org.gds.monitoring.remote.event.ServerListener;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -46,7 +52,26 @@ public class RemoteListener implements ServerListener
       gdsFile.setDocId(se.getFileId());
       gdsFile.setEtag(se.getEtag());
       gdsFile.setTitle(se.getTitle());
-      fsManager.updateFileIndex(gdsFile);
+      gdsFile.setParents(se.getParents());
+      if (fsManager.updateFileIndex(gdsFile))
+      {
+         se.getContext().setUpdated(gdsFile.getDocId(), MonitorContext.DocType.FILE);
+      }
+   }
+
+   public void onFileEndUpdate(final ServerEvent se)
+   {
+      for (String fileName : se.getContext().getUpdatedFiles())
+      {
+         fsManager.updatePathFileIndex(fileName);
+      }
+      
+      Set<String> deletedFiles = new HashSet(fsManager.getFilesName());
+      deletedFiles.removeAll(se.getContext().getAllFiles());
+      for (String id : deletedFiles)
+      {
+         fsManager.deleteFileIndex(id);
+      }
    }
 
    public void onDirectorySync(final ServerEvent se)
@@ -55,7 +80,25 @@ public class RemoteListener implements ServerListener
       gdsDir.setDocId(se.getFileId());
       gdsDir.setEtag(se.getEtag());
       gdsDir.setTitle(se.getTitle());
-      gdsDir.setParent(se.getParents());
-      fsManager.updateDirIndex(gdsDir);
+      gdsDir.setParents(se.getParents());
+      if (fsManager.updateDirIndex(gdsDir))
+      {
+        se.getContext().setUpdated(gdsDir.getDocId(), MonitorContext.DocType.FOLDER);
+      }
+   }
+
+   public void onDirectoryEndUpdate(final ServerEvent se)
+   {
+      for (String dirName : se.getContext().getUpdatedFolders())
+      {
+         fsManager.updatePathDirIndex(dirName);
+      }
+
+      Set<String> deletedDirs = new HashSet(fsManager.getDirectoriesName());
+      deletedDirs.removeAll(se.getContext().getAllFolders());
+      for (String id : deletedDirs)
+      {
+         fsManager.deleteDirIndex(id);
+      }
    }
 }

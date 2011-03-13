@@ -20,6 +20,7 @@
 package org.gds.fs.mapping;
 
 import org.gds.fs.mapping.annotations.Flat;
+import org.gds.fs.object.GDSObjectType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -111,7 +112,15 @@ public class FlatMapping
             if (!Collection.class.isAssignableFrom(field.getType()))
             {
                Method method = clazz.getMethod("set" + capitalize(key), field.getType());
-               method.invoke(t, value);
+               if (Enum.class.isAssignableFrom(field.getType()))
+               {
+                  Method valueOf = field.getType().getMethod("valueOf", String.class);
+                  method.invoke(t, valueOf.invoke(field.getType(), value));
+               }
+               else
+               {
+                  method.invoke(t, value);
+               }
             }
             else
             {

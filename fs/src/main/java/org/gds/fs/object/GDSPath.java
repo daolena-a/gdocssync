@@ -16,42 +16,47 @@
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
+package org.gds.fs.object;
 
-package org.gds.monitoring.local;
+import org.gds.fs.mapping.annotations.Flat;
 
-import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class LocalListener implements JNotifyListener
+public class GDSPath extends GDSObject
 {
+   @Flat
+   private List<String> paths;
 
-   public static final int mask =
-         JNotify.FILE_CREATED |
-         JNotify.FILE_DELETED |
-         JNotify.FILE_MODIFIED |
-         JNotify.FILE_RENAMED;
+   @Flat
+   private GDSObjectType type;
 
-   public void fileCreated(final int i, final String s, final String s1)
+   public GDSPath()
    {
-      System.out.println("created : " + s + " " + s1);
+      paths = new ArrayList<String>();
    }
 
-   public void fileDeleted(final int i, final String s, final String s1)
+   public List<String> getPaths()
    {
-      System.out.println("removed : " + s + " " + s1);
+      return paths;
    }
 
-   public void fileModified(final int i, final String s, final String s1)
+   public void setPaths(List<String> paths)
    {
-      System.out.println("updated : " + s + " " + s1);
+      this.paths = paths;
    }
 
-   public void fileRenamed(final int i, final String s, final String s1, final String s2)
+   public GDSObjectType getType()
    {
-      System.out.println("renamed : " + s + " " + s1);
+      return type;
+   }
+
+   public void setType(final GDSObjectType type)
+   {
+      this.type = type;
    }
 }

@@ -17,41 +17,21 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.local;
-
-import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyListener;
+package org.gds.fs.event;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class LocalListener implements JNotifyListener
+public interface IndexListener
 {
-
-   public static final int mask =
-         JNotify.FILE_CREATED |
-         JNotify.FILE_DELETED |
-         JNotify.FILE_MODIFIED |
-         JNotify.FILE_RENAMED;
-
-   public void fileCreated(final int i, final String s, final String s1)
-   {
-      System.out.println("created : " + s + " " + s1);
-   }
-
-   public void fileDeleted(final int i, final String s, final String s1)
-   {
-      System.out.println("removed : " + s + " " + s1);
-   }
-
-   public void fileModified(final int i, final String s, final String s1)
-   {
-      System.out.println("updated : " + s + " " + s1);
-   }
-
-   public void fileRenamed(final int i, final String s, final String s1, final String s2)
-   {
-      System.out.println("renamed : " + s + " " + s1);
-   }
+   void onCreateFile(IndexEvent ie);
+   void onCreateFolder(IndexEvent ie);
+   void onCreatePath(IndexEvent ie);
+   void onUpdateFile(IndexEvent ie);
+   void onUpdateFolder(IndexEvent ie);
+   void onUpdatePath(IndexEvent ie);
+   void onDeleteFile(IndexEvent ie);
+   void onDeleteFolder(IndexEvent ie);
+   void onDeletePath(IndexEvent ie);
 }

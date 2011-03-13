@@ -17,14 +17,33 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.monitoring.remote;
+package org.gds.fs.event;
+
+import org.gds.fs.Index;
+import org.gds.fs.object.GDSObject;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public interface ServerListener
+public class IndexEvent
 {
-   void onFileSync(ServerEvent se);
-   void onDirectorySync(ServerEvent se);
+   private GDSObject gdsObject;
+   private Index index;
+
+   public IndexEvent(final GDSObject gdsObject, final Index index)
+   {
+      this.gdsObject = gdsObject;
+      this.index = index;
+   }
+
+   public GDSObject getGdsObject()
+   {
+      return gdsObject;
+   }
+
+   public Index getIndex()
+   {
+      return index;
+   }
 }

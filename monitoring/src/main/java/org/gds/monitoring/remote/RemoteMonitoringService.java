@@ -21,12 +21,10 @@ package org.gds.monitoring.remote;
 
 import com.google.gdata.data.Link;
 import com.google.gdata.data.docs.DocumentListEntry;
+import org.gds.monitoring.remote.event.ServerEvent;
+import org.gds.monitoring.remote.event.ServerListener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -36,11 +34,13 @@ public class RemoteMonitoringService extends Thread
 {
    private GoogleDocClient googleDocClient;
    private int delay;
-   private List<ServerListener> listeners = new LinkedList<ServerListener>();
+   private List<ServerListener> listeners;
+   private MonitorContext context;
 
    public RemoteMonitoringService(final GoogleDocClient googleDocClient)
    {
       this(googleDocClient, 10);
+      listeners = new LinkedList<ServerListener>();
    }
 
    public RemoteMonitoringService(final GoogleDocClient googleDocClient, final int delay)
@@ -59,29 +59,64 @@ public class RemoteMonitoringService extends Thread
    {
       while(true)
       {
+         // TODO : first check the DateTime
+         context = new MonitorContext();
+
+         // Doc
+         // TODO : get new folders only
          for (DocumentListEntry documentListEntry : googleDocClient.getFolders()
                  .getEntries())
          {
+            context.add(documentListEntry.getDocId(), MonitorContext.DocType.FOLDER);
             fireEvent(new ServerEvent(
-                    documentListEntry.getDocId(),
-                    documentListEntry.getEtag(),
-                    documentListEntry.getTitle().getPlainText(),
-                    parentId(documentListEntry.getParentLinks())
+                 documentListEntry.getDocId(),
+                 documentListEntry.getEtag(),
+                 documentListEntry.getTitle().getPlainText(),
+                 parentId(documentListEntry.getParentLinks()),
+                 context
             ),
-                    Event.UPDATE_DIRECTORY
+                 Event.UPDATE_DIRECTORY
             );
          }
+
+         // Files
+         // TODO : get new files only
          for (DocumentListEntry documentListEntry : googleDocClient.getFiles().getEntries())
          {
+            context.add(documentListEntry.getDocId(), MonitorContext.DocType.FILE);
             fireEvent(new ServerEvent(
-                    documentListEntry.getDocId(),
-                    documentListEntry.getEtag(),
-                    documentListEntry.getTitle().getPlainText(),
-                    parentId(documentListEntry.getParentLinks())
+                 documentListEntry.getDocId(),
+                 documentListEntry.getEtag(),
+                 documentListEntry.getTitle().getPlainText(),
+                 parentId(documentListEntry.getParentLinks()),
+                 context
             ),
-                    Event.UPDATE_FILE
+                 Event.UPDATE_FILE
             );
          }
+
+         //
+         fireEvent(new ServerEvent(
+               null,
+               null,
+               null,
+               null,
+               context
+         ),
+               Event.END_UPDATE_DIRECTORY
+         );
+
+         //
+         fireEvent(new ServerEvent(
+               null,
+               null,
+               null,
+               null,
+               context
+            ),
+                  Event.END_UPDATE_FILE
+         );
+         
          try
          {
             Thread.sleep(delay * 1000);
@@ -104,6 +139,12 @@ public class RemoteMonitoringService extends Thread
                break;
             case UPDATE_FILE:
                serverListener.onFileSync(se);
+               break;
+            case END_UPDATE_DIRECTORY:
+               serverListener.onDirectoryEndUpdate(se);
+               break;
+            case END_UPDATE_FILE:
+               serverListener.onFileEndUpdate(se);
                break;
          }
       }
@@ -128,6 +169,8 @@ public class RemoteMonitoringService extends Thread
    enum Event
    {
       UPDATE_FILE,
-      UPDATE_DIRECTORY
+      END_UPDATE_FILE,
+      UPDATE_DIRECTORY,
+      END_UPDATE_DIRECTORY;
    }
 }

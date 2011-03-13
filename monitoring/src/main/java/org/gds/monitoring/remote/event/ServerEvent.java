@@ -17,40 +17,37 @@
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-package org.gds.fs;
+package org.gds.monitoring.remote.event;
 
-import org.gds.fs.mapping.annotations.Flat;
+import org.gds.monitoring.remote.MonitorContext;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class GDSFile
+public class ServerEvent
 {
-   private String docId;
-   
-   @Flat
+   private String fileId;
    private String etag;
-
-   @Flat
    private String title;
+   private List<String> parents;
+   private MonitorContext context;
 
-   public GDSFile()
+   public ServerEvent(final String fileId, final String etag, final String title, final List<String> parents, final MonitorContext context)
    {
+      this.fileId = fileId;
+      this.etag = etag;
+      this.title = title;
+      this.parents = parents;
+      this.context = context;
    }
 
-   public String getDocId()
+   public String getFileId()
    {
-      return docId;
-   }
-
-   public void setDocId(final String docId)
-   {
-      if (docId == null)
-      {
-         throw new IllegalArgumentException("docId is null");
-      }
-      this.docId = docId;
+      return fileId;
    }
 
    public String getEtag()
@@ -58,46 +55,18 @@ public class GDSFile
       return etag;
    }
 
-   public void setEtag(final String etag)
-   {
-      this.etag = etag;
-   }
-
    public String getTitle()
    {
       return title;
    }
 
-   public void setTitle(final String title)
+   public List<String> getParents()
    {
-      this.title = title;
+      return parents;
    }
 
-   @Override
-   public boolean equals(final Object o)
+   public MonitorContext getContext()
    {
-      if (this == o)
-      {
-         return true;
-      }
-      if (o == null || getClass() != o.getClass())
-      {
-         return false;
-      }
-
-      GDSFile gdsFile = (GDSFile) o;
-
-      if (docId != null ? !docId.equals(gdsFile.docId) : gdsFile.docId != null)
-      {
-         return false;
-      }
-
-      return true;
-   }
-
-   @Override
-   public int hashCode()
-   {
-      return docId != null ? docId.hashCode() : 0;
+      return context;
    }
 }
