@@ -47,6 +47,10 @@ public abstract class GDSFSManager
    private FlatMapping mapping;
    private Index index;
 
+    public Index getIndex(){
+        return index;
+    }
+
    protected GDSFSManager(final File monitoredFile)
    {
       if (monitoredFile == null)

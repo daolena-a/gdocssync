@@ -2,7 +2,8 @@ package gds.test.UnixFileSystem;
 
 import junit.framework.TestCase;
 import org.gds.fs.GDSFSManager;
-import org.gds.fs.IndexCache;
+import org.gds.fs.Index;
+
 import org.gds.fs.unix.GDSFSUnixManager;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class FileSystemTestCase extends TestCase {
         if (paths.exists() == false){
             throw new FileNotFoundException("folder's directory not found");
         }
-        IndexCache ic  = filesystem.getCache();
+        Index ic  = filesystem.getIndex();
         if (ic == null){
             throw new NullPointerException("cache is null");
         }
