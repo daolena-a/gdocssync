@@ -1,7 +1,8 @@
 import junit.framework.TestCase;
-import org.gds.fs.GDSDir;
-import org.gds.fs.GDSFile;
+
 import org.gds.fs.mapping.FlatMapping;
+import org.gds.fs.object.GDSDir;
+import org.gds.fs.object.GDSFile;
 import org.junit.Test;
 
 import java.io.*;
@@ -22,7 +23,7 @@ public class TestMapping  {
         GDSDir gdsDir = new GDSDir();
         gdsDir.setDocId("testunit");
         gdsDir.setEtag("testunit");
-        gdsDir.setParent(null);
+        //gdsDir.setParents();setParent(null);
         gdsDir.setTitle("testunit");
         FlatMapping fm = new FlatMapping();
         String value = "etag: testunit\n" + "title: testunit\n";

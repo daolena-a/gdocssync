@@ -57,7 +57,7 @@ public class GDS
    {
       fsManager.init();
       startTray();
-      //startLocalMonitoring(monitoredFile);
+      startLocalMonitoring(monitoredFile);
       startRemoteMonitoring();
    }
 
@@ -68,9 +68,10 @@ public class GDS
 
    private void startLocalMonitoring(File monitoredFile)
    {
+
       try
       {
-         JNotify.addWatch(monitoredFile.getAbsolutePath(), LocalListener.mask, true, new LocalListener());
+         JNotify.addWatch(monitoredFile.getAbsolutePath(), LocalListener.mask, false, new LocalListener(googleDocClient));
        //  JNotify.addWatch(fsManager.getSysDirectory().getAbsolutePath(), LocalListener.mask, true, new IndexListener());
 
       }

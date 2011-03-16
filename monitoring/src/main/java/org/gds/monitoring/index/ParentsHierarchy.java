@@ -1,7 +1,8 @@
 package org.gds.monitoring.index;
 
 
-import org.gds.fs.GDSDir;
+
+import org.gds.fs.object.GDSDir;
 
 import java.util.ArrayList;
 import java.util.List;
